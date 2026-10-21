@@ -74,6 +74,12 @@ class AccountHoldersRelationship(StrEnum):
     PRIMARY = "primary"
     BENEFICIARY = "beneficiary"
     JOINT = "joint"
+
+class AccountActivity(StrEnum):
+    LOGIN = "login"
+    LOGOUT = "logout"
+    REGISTERED = "registration"
+    
     
 # -------------------------------------------------------------
 # HELPER FUNCTIONS
@@ -199,7 +205,19 @@ class Account(SQLModel, table=True):
     iban : str = Field(index=True, unique=True)
     
     users: list["User"] = Relationship(back_populates="accounts", link_model=AccountHolder)
+
+class AccountActivity(SQLModel, table=True):
+    __tablename__ = "accountactivity"
+    __table_args__ = (
+            enum_check("activity", AccountActivity, "account_activity_valid"),
+        )    
     
+    id : uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
+    initiated_by : uuid.UUID = Field(foreign_key="users.id")
+    account_id : uuid.UUID = Field(foreign_key="accounts.id")
+    activity : AccountActivity = Field(sa_type=String(20), 
+                         nullable=False)
+    created_at : datetime = ts_field()
     
 # Foreign keys in the following tables are not set to on delete cascade since we wouldn't want to delete 
 # entries from the ledger or transactional record for compliance reasons.

@@ -1,4 +1,5 @@
-
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordRequestForm
 
 from passlib.context import CryptContext
 from pydantic import EmailStr
@@ -6,6 +7,7 @@ import faker as fake
 
 from app.routers import data_models
 from app.database import schemas, session
+from app.utils import oauth2
 
 pwd_context = CryptContext(
     schemes=["pbkdf2_sha256", "bcrypt"],
@@ -31,6 +33,23 @@ def verify(plain_password: str, hashed_password: str) -> bool:
 # TRANSACTION HELPERS
 # -----------------------------------------------------------------
 
+
+def insert_transaction(*, 
+                       transaction: data_models.Transaction, idempotency_key: str,
+                       session: session.SessionDep,
+                       current_user_id: str):
+    
+    transaction = schemas.Transaction(idempotency_key=idempotency_key,
+                                      initiated_by=current_user_id,
+                                      txn_type=transaction.transaction_type,
+                                      amount=transaction.amount,
+                                      currency=transaction.currency,
+                                      description=transaction.description
+                                      )
+    session.add(transaction)
+    session.commit()
+    session.refresh(transaction)
+        
 def credit_account() -> None:
     """Credit the specified amount to the account."""
     pass

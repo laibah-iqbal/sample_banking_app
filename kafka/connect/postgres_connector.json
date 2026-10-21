@@ -1,0 +1,14 @@
+{
+  "name": "postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "${env:DEBEZIUM_USER}",
+    "database.password": "${env:DEBEZIUM_PASSWORD}",
+    "database.dbname" : "${env:DATABASE_NAME}",
+    "topic.prefix": "transactions",
+    "table.include.list": "public.transactions"
+
+  }
+}

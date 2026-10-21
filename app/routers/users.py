@@ -56,13 +56,13 @@ async def register_user(payload: data_models.UserBase, session: SessionDep) -> s
 async def get_user_accounts(session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):
     return current_user.accounts
 
-@router.patch("", status_code=HTTP_501_NOT_IMPLEMENTED)
-async def update_account_info(new_info: dict, session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):
-    # if delete user make user inactive
-    # make any priamry single accounts inactive
-    # pass off any joint accounts to joint as primary
-    # only other fields that can be updated are password and address
-    pass
+# @router.patch("", status_code=HTTP_501_NOT_IMPLEMENTED)
+# async def update_account_info(new_info: dict, session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):
+#     # if delete user make user inactive
+#     # make any priamry single accounts inactive
+#     # pass off any joint accounts to joint as primary
+#     # only other fields that can be updated are password and address
+#     pass
 
 # Users
 # view accounts [DONE]
