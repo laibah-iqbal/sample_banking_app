@@ -11,7 +11,7 @@ router = APIRouter(prefix="/transactions", tags=["transactions"])
 redis_client = Redis(host=f"{config.settings.redis_host}", port=f"{config.settings.redis_port}", decode_responses=True)
 idempotency_manager = idempotency.IdompotencyManager(redis_client=redis_client)
 
-@router.post("", status_code=status.HTTP_200_OK)
+@router.post("", status_code=status.HTTP_202_ACCEPTED)
 async def process_transaction(payload: data_models.TransactionBase, 
                               session: SessionDep, current_user: User = Depends(oauth2.get_current_user), 
                               idempotency_key: str = Header(..., alias="Idempotency-Key")):
@@ -28,13 +28,15 @@ async def process_transaction(payload: data_models.TransactionBase,
         )
     
     try:
-        helpers.process_transaction()
+        helpers.insert_transaction(transaction=payload,idempotency_key=idempotency_key,
+                                   session=session,current_user_id=current_user.id)
         # process transaction
             # 1. insert into transaction table with status pending
             # 2. insert into WAL for Kafka processing
             # 3. if transaction failed: return 500
             # 4. if transaction success: cache response, return 200
     except Exception as Exc:
+        print(f"Transaction processing failed: {Exc!r}")
         # If DB fails, release lock so the user can retry the transfer
         await idempotency_manager.release_lock(redis_key)
         raise HTTPException(

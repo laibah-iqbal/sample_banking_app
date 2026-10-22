@@ -4,6 +4,8 @@ from sqlmodel import Field
 from typing import Optional
 from datetime import date, timezone, datetime
 
+from app.database.schemas import TxnType
+
 
 class UserBase(BaseModel):
     email : EmailStr 
@@ -22,11 +24,7 @@ class UserRegisterOutput(BaseModel):
 
 class UserID(UserBase):
     id : str
-    
-class UserOut(BaseModel):
-    email : EmailStr
-    accounts : list[AccountBase]
-    
+
 class AccountBase(BaseModel):
     status: str
     account_type: str
@@ -39,13 +37,12 @@ class AccountCreate(AccountBase):
     user_id: str
     relationship: str
 
-class TransactionBase(BaseModel):
-    initiated_by: str
-    transaction_type: str   
+class UserOut(BaseModel):
+    email : EmailStr
+    accounts : list[AccountBase]
     
 class TransactionBase(BaseModel):
-    initiated_by: str
-    transaction_type: str
+    transaction_type: TxnType
     amount: float
     currency: str = "USD"
     description: Optional[str] = None

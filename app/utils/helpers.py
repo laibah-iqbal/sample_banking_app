@@ -35,7 +35,7 @@ def verify(plain_password: str, hashed_password: str) -> bool:
 
 
 def insert_transaction(*, 
-                       transaction: data_models.Transaction, idempotency_key: str,
+                       transaction: data_models.TransactionBase, idempotency_key: str,
                        session: session.SessionDep,
                        current_user_id: str):
     
