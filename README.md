@@ -1,29 +1,52 @@
-# Banking App Architecture 
+│   └── utils/               # config, JWT/OAuth2, password hashing, idempotency manager
+├── init-postgres/           # creates the Debezium replication user and publication
+├── kafka/
+│   ├── connect/             # Debezium connector config and registration script
+│   └── consumers.py         # CDC event consumer
+├── flink/                   # Flink jobs (in progress)
+├── ml/
+│   ├── generate_dataset.py  # synthetic fraud dataset
+│   ├── train_fraud_model.py # XGBoost training
+│   └── models/              # saved model and feature schema
+├── seed_data.py             # fake users and accounts with Faker
+├── docker-compose.yml
+└── Dockerfile
+```
 
-The primary aim of this project is to understand and implement the kind of data architecture behind modern applications dealing with large volumes of data and transactions such as banking, ecommerce and delivery apps. A secondary aim is to learn how to leverage AI in data engineering workflows. 
+## Security
 
-## Architecture
+- Passwords are hashed with **PBKDF2-SHA256 (600,000 rounds)** and never stored in plain text.
+- Endpoints are protected with **OAuth2 and JWT** access tokens that expire.
+- Every login attempt is logged with its outcome, which also feeds the fraud model.
+- Secrets live in a `.env` file that is gitignored, and Debezium reads its credentials from environment variables rather than the connector config.
+- Debezium uses a **least-privilege replication user** instead of the database owner.
+- The app container runs as a **non-root user**.
 
-As such, I have built a simple architecture outlined in the diagram below.
+## Testing, observability and load testing
 
-<img width="702" height="642" alt="architecture drawio" src="https://github.com/user-attachments/assets/f8baf9b2-9a32-4d01-ab64-d70b53c71450" />
+These are planned:
 
-- **FastAPI app:** An API with endpoints for user registration, login, and initiating banking transactions (deposits, withdrawals, and transfers). A Locust file will be used to send simulated traffic to this app to test the latency and load handling ability of the architecture. JWT tokens and OAuth2 authorisation are implemented and used to protect the endpoints.
-- **PostgreSQL:** Functions as the transactional database for the app.
-- **Redis cache:** Used to implement idempotency in transactions. When a transaction is initiated, the app first checks Redis cache for a transaction with the same idempotency key and payload. If the transaction does not exist in cache, it is inserted into both cache and Postgres database with the status pending. If a transactio with the same payload and idempotency key arrives, it will not be processed. Once the transaction has been processed, the status is returned to the app, the completed transaction is updated in the cache and stored for 24 hours for quick retrieval.
-- **Apache Kafka + Debezium connector:** This allows transaction processing to not slow down the app. Postgres' wirte-ahead-log (WAL) is read by Debezium and streamed to Kafka consumers as an event stream. The Kafka consumers then use the fraud detection ML model to classify the transaction as fraud/not fraud (fraudulent transactions are cancelled), processed by Apache Flink for real-time analytics, and store the transactions in minio S3 storage.
-- **Apache Flink:** Used to keep daily metric aggregates for real-time analytics. Also used to aggregate succesful/failed login attempts by user. This is a feature required by the fraud detection model.
-- **S3 bucket:** For cold storage of data and to allow the batch pipeline run to not slow down the transactional database.
-- **Airflow:** For orchestrating batch pipelines that load data from S3 bucket into the analytical warehouse.
-- **dbt:** Used for data modelling and creating the schema for the analytical warehouse.
+- **Tests:** unit tests for the idempotency manager and helpers, and integration tests that run a transaction through the whole pipeline.
+- **Observability:** pipeline and consumer metrics with Grafana / OpenTelemetry.
+- **Load testing:** a Locust file sending simulated traffic to measure latency and throughput. I will add the results here.
+
+## Using AI in the pipeline
+
+This is the secondary aim of the project and is planned for once the core pipeline is finished:
+
+- **Natural-language questions over metrics:** ask questions in plain English and have them answered from the gold tables in the analytical warehouse.
+- **Pipeline failure diagnosis:** an agent that reads pipeline errors, works out the likely cause and suggests a fix as a pull request.
 
 ## Deployment
-- Docker:
-- Terraform:
-- Github Actions:
-- Cloud hosting
-  
-## Best practices
-1. Typed schemas using SQLModel and Alembic for data migrations to allow tracking schema changes.
-2. Idempotent transactions through Redis caching layer.
-3. 
+
+- **Docker:** Every service runs in its own container, orchestrated locally with Docker Compose. Services start in dependency order using health checks.
+- **Terraform:** Planned, to provision the cloud infrastructure as code.
+- **GitHub Actions:** Planned, for running tests and deploying on every push.
+- **Cloud hosting:** Planned, on AWS.
+
+## Things I learned along the way
+
+- **Kafka listeners in Docker.** Containers and the host machine need different listeners. Other containers reach Kafka at `kafka:19092`, while scripts on my laptop use `localhost:9092`. Mixing these up is why Kafka can work from one place and not another, so I kept them separate on purpose.
+- **Waiting for Kafka Connect properly.** Connect's port opens before its REST API is ready and returns a `404` in the meantime, which `curl`'s own retry treats as success. The registration script retries until it gets a real `201` (or `409` if the connector already exists).
+- **Docker volumes vs bind mounts.** A named volume persists data, but on Docker's Linux VM where I can't easily get to it. Bind-mounting a local folder keeps the Postgres data on my own filesystem.
+- **Installing PyFlink.** Its dependency chain still expects `pkg_resources`, which recent `setuptools` versions removed, so `setuptools` has to be pinned below 81 and installed with `--no-build-isolation`.
