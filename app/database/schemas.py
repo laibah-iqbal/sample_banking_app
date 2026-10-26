@@ -75,11 +75,13 @@ class AccountHoldersRelationship(StrEnum):
     BENEFICIARY = "beneficiary"
     JOINT = "joint"
 
-class AccountActivity(StrEnum):
+class UserAccountActivity(StrEnum):
     LOGIN = "login"
     LOGOUT = "logout"
-    REGISTERED = "registration"
-    
+
+class UserAccountActivityOutcome(StrEnum):
+    SUCCESS = "success"
+    FAILURE = "failed"
     
 # -------------------------------------------------------------
 # HELPER FUNCTIONS
@@ -206,17 +208,19 @@ class Account(SQLModel, table=True):
     
     users: list["User"] = Relationship(back_populates="accounts", link_model=AccountHolder)
 
-class AccountActivity(SQLModel, table=True):
-    __tablename__ = "accountactivity"
+class UserAccountActivity(SQLModel, table=True):
+    __tablename__ = "user_accountactivity"
     __table_args__ = (
-            enum_check("activity", AccountActivity, "account_activity_valid"),
+            enum_check("activity", UserAccountActivity, "account_activity_valid"),
         )    
     
     id : uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
     initiated_by : uuid.UUID = Field(foreign_key="users.id")
-    account_id : uuid.UUID = Field(foreign_key="accounts.id")
-    activity : AccountActivity = Field(sa_type=String(20), 
+    activity : UserAccountActivity = Field(sa_type=String(20), 
                          nullable=False)
+    activity_outcome : UserAccountActivityOutcome = Field(sa_type=String(20), 
+                         nullable=False)
+    outcome_reason : Optional[str] = None
     created_at : datetime = ts_field()
     
 # Foreign keys in the following tables are not set to on delete cascade since we wouldn't want to delete 
@@ -236,6 +240,7 @@ class Transaction(SQLModel, table=True):
     id : uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
     idempotency_key : str = Field(nullable=False)
     initiated_by : uuid.UUID = Field(foreign_key="users.id")
+    account_id: uuid.UUID = Field(foreign_key="accounts.id")
     txn_type : TxnType = Field(sa_type=String(20),
                                        nullable=False,
                                        default=TxnType.TRANSFER,

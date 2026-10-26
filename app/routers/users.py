@@ -6,7 +6,7 @@ from faker import Faker
 
 from app.database import schemas
 from app.routers import data_models
-from app.utils.helpers import hash_password
+from app.utils.helpers import hash_password, log_account_activity
 from app.database.session import SessionDep
 from app.utils.oauth2 import get_current_user
 
@@ -50,11 +50,24 @@ async def register_user(payload: data_models.UserBase, session: SessionDep) -> s
     session.commit()
     session.refresh(accountholder)
     
+    log_account_activity(activity="registered", activity_outcome="success",
+                         session=session, user_id=user_id)
+    
     return user
 
 @router.get("/accounts", response_model=list[data_models.AccountBase])
 async def get_user_accounts(session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):
     return current_user.accounts
+
+@router.post("/account_history/{account_id}", response_model=list[data_models.LedgerEntry])
+async def select_account(account_id: str, session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):
+    ledger_entries = session.exec(
+            select(schemas.LedgerEntry).where(schemas.LedgerEntry.account_id == account_id)
+        ).all()
+    # join to ledger and transactions to get transaction type and receiver account
+    return ledger_entries
+
+
 
 # @router.patch("", status_code=HTTP_501_NOT_IMPLEMENTED)
 # async def update_account_info(new_info: dict, session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):

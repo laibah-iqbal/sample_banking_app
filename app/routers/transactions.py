@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Header
 from fastapi.responses import JSONResponse
+from sqlmodel import select 
 from redis.asyncio import Redis
 from app.routers import data_models
 from app.database.session import SessionDep
 from app.utils import oauth2, idempotency, config, helpers
-from app.database.schemas import User
+from app.database.schemas import User, Account
 
 
 router = APIRouter(prefix="/transactions", tags=["transactions"])
@@ -27,6 +28,15 @@ async def process_transaction(payload: data_models.TransactionBase,
             headers={"X-Cache": "HIT"}
         )
     
+    account = session.exec(select(Account).where(Account.id == payload.account_id)).first()
+    account_balance = account.get("balance")
+    if account_balance < payload.amount:
+        # insert failed transaction
+        raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Transaction failed. Insufficent funds in account."
+                )
+        
     try:
         helpers.insert_transaction(transaction=payload,idempotency_key=idempotency_key,
                                    session=session,current_user_id=current_user.id)
@@ -35,6 +45,9 @@ async def process_transaction(payload: data_models.TransactionBase,
             # 2. insert into WAL for Kafka processing
             # 3. if transaction failed: return 500
             # 4. if transaction success: cache response, return 200
+        # await Kafka consumer response
+            # insert ledger entries
+            # change status to COMPLETED
     except Exception as Exc:
         print(f"Transaction processing failed: {Exc!r}")
         # If DB fails, release lock so the user can retry the transfer

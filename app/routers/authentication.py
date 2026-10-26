@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from app.database.schemas import User
 from app.utils.oauth2 import UserLogin
-from app.utils.helpers import hash_password, verify
+from app.utils.helpers import hash_password, verify, log_account_activity
 from app.utils.oauth2 import create_access_token
 create_access_token
 from app.database.session import SessionDep
@@ -25,10 +25,17 @@ def login(*, user_credentials: OAuth2PasswordRequestForm = Depends(), session: S
         )
         
     if not verify(user_credentials.password, user.password_hash):
+        log_account_activity(activity="login", activity_outcome="failed",
+                             outcome_reason="Invalid password.", session=session,
+                             user_id=user.id)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid password.",
         )
 
+    log_account_activity(activity="login",
+                         activity_outcome="success",
+                        session=session,
+                        user_id=user.id)
     access_token = create_access_token(data={"user_id": str(user.id)})
     return {"access_token": access_token, "token_type": "bearer"}

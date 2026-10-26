@@ -42,16 +42,13 @@ class UserOut(BaseModel):
     accounts : list[AccountBase]
     
 class TransactionBase(BaseModel):
+    initiated_by: str
+    account_id: str
     transaction_type: TxnType
     amount: float
     currency: str = "USD"
     description: Optional[str] = None
-    
-class TransactionTransfer(TransactionBase):
-    target_account_iban: str
-    
-class TransactionCreate(TransactionTransfer):
-    idempotency_key: str
+    target_account_iban: Optional[str] = None
 
 class TransactionFailed(TransactionBase):
     reason: str
@@ -59,5 +56,14 @@ class TransactionFailed(TransactionBase):
 class TransactionSuccess(TransactionBase):
     transaction_id: str
     completed_at: datetime
-
+    
+class LedgerEntry(BaseModel):
+    transaction_id : str
+    transaction_type: str
+    receiver_account: str
+    direction: str
+    amount : float
+    balance_after : float
+    created_at : datetime
+    
     

@@ -1,0 +1,13 @@
+# apache-flink's dependency chain (via apache-beam -> grpcio-tools) still
+# uses an old-style setup.py that assumes pkg_resources exists. Recent
+# setuptools releases dropped it, and pip's build isolation always grabs the
+# newest setuptools for the isolated build env regardless of what's installed
+# here — so setuptools must be pinned below the version that removed
+# pkg_resources, AND installed with --no-build-isolation so the build
+# actually uses this pinned version instead of isolating away from it:
+#
+#   pip install "setuptools<81"
+#   pip install --no-build-isolation -r flink/requirements.txt
+#
+setuptools<81
+apache-flink

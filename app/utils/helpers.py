@@ -41,6 +41,7 @@ def insert_transaction(*,
     
     transaction = schemas.Transaction(idempotency_key=idempotency_key,
                                       initiated_by=current_user_id,
+                                      account_id=transaction.account_id,
                                       txn_type=transaction.transaction_type,
                                       amount=transaction.amount,
                                       currency=transaction.currency,
@@ -49,6 +50,20 @@ def insert_transaction(*,
     session.add(transaction)
     session.commit()
     session.refresh(transaction)
+
+def log_account_activity(activity: str, activity_outcome: str,
+                         outcome_reason: str,
+                         session: session.SessionDep,
+                         user_id: str):
+    accountactivity = schemas.UserAccountActivity(
+        initiated_by=user_id,
+        activity=activity,
+        activity_outcome=activity_outcome, 
+        outcome_reason=outcome_reason
+    )    
+    session.add(accountactivity)
+    session.commit()
+    session.refresh(accountactivity)
         
 def credit_account() -> None:
     """Credit the specified amount to the account."""
