@@ -2,6 +2,7 @@ from fastapi import FastAPI, Body, Response, HTTPException, status
 from pydantic import BaseModel, EmailStr
 from sqlmodel import Field
 from typing import Optional
+from decimal import Decimal
 from datetime import date, timezone, datetime
 
 from app.database.schemas import TxnType
@@ -45,7 +46,11 @@ class TransactionBase(BaseModel):
     initiated_by: str
     account_id: str
     transaction_type: TxnType
-    amount: float
+    # Decimal, not float: this value is compared against and arithmetic'd
+    # with accounts.balance / ledger_entries.amount, which are NUMERIC(18,2).
+    # Mixing Decimal and float raises TypeError, and float can't represent
+    # money exactly anyway.
+    amount: Decimal
     currency: str = "USD"
     description: Optional[str] = None
     target_account_iban: Optional[str] = None

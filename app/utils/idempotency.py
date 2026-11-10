@@ -4,20 +4,33 @@ from fastapi import HTTPException, status
 from app.routers import data_models
 from redis.asyncio import Redis
 
+
+
 class IdompotencyManager:
     def __init__(self, redis_client: Redis, ttl: int = 86400):
         self.redis = redis_client
         self.ttl = ttl  # Default 24 hours
     
+    @staticmethod
+    def redis_key(idempotency_key: str) -> str:
+        """
+        The cache key for an idempotency key. Shared rather than inlined
+        because the fraud consumer settles transactions out of band and has to
+        write the cached response under exactly the key the next retried POST
+        will look under — two copies of this format string would silently
+        diverge and every retry would miss the cache.
+        """
+        return f"idempotency:transaction:{idempotency_key}"
+
     async def _compute_payload_hash(self, transaction: data_models.TransactionBase) -> str:
         """Hash the request body to prevent payload tampering under the same key."""
         body = transaction.model_dump_json().encode("utf-8")
         return hashlib.sha256(body).hexdigest()
-    
+
     async def check_and_cache(self, idempotency_key: str, transaction: data_models.TransactionBase):
         """Returns redis_key, if key was already in cache, and cached_response"""
         # hash body
-        redis_key = f"idempotency:transaction:{idempotency_key}"
+        redis_key = self.redis_key(idempotency_key)
         hashed_request = await self._compute_payload_hash(transaction=transaction)
         
         # returns OK if key did not exist and was inserted, returns NULL if key already existed
@@ -52,10 +65,14 @@ class IdompotencyManager:
         # return cached response if body hasn't changed and transaction is completed
         return redis_key, True, cached_data.get("response")
     
-    async def cache_response(self, redis_key: str, status_code: int, response_body: dict):
+    async def cache_response(self, redis_key: str, status: str, status_code: int, response_body: dict):
         """Save the completed response payload in Redis."""
+        cached_data_str = await self.redis.get(redis_key)
+        cached_payload_hash = json.loads(cached_data_str).get("payload_hash") if cached_data_str else None
+
         data = {
-            "status": "COMPLETED",
+            "status": status,
+            "payload_hash": cached_payload_hash,
             "response": {
                 "status_code": status_code,
                 "body": response_body

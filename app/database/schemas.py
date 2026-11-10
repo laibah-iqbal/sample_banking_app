@@ -55,9 +55,6 @@ class TxnType(StrEnum):
     TRANSFER = "transfer"
     DEPOSIT = "deposit"
     WITHDRAWAL = "withdrawal"
-    FEE = "fee"
-    REVERSAL = "reversal"
- 
  
 class TxnStatus(StrEnum):
     PENDING = "pending"
@@ -89,6 +86,12 @@ class UserAccountActivityOutcome(StrEnum):
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
+
+# uuid.uuid7 was added in Python 3.14. flink/.venv-flink pins Python 3.11
+# (PyFlink doesn't support 3.14 yet) and only imports this module to read
+# table metadata, never to actually insert a row — uuid4 is a fine fallback
+# there since the factory is never called for real in that environment.
+_new_id = uuid.uuid7 if hasattr(uuid, "uuid7") else uuid.uuid4
 
 def enum_check(column: str, enum: type[StrEnum], name:str) -> CheckConstraint:
     """
@@ -165,7 +168,7 @@ class User(SQLModel, table=True):
     __tablename__ = "users"
     __table_args__ = (enum_check("status", CustomerStatus, "status_valid"),)
    
-    id : uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
+    id : uuid.UUID = Field(default_factory=_new_id, primary_key=True)
     email : str = Field(index=True, unique=True)
     password_hash : str
     phone_number : str = Field(index=True, unique=True)
@@ -185,12 +188,17 @@ class User(SQLModel, table=True):
 class Account(SQLModel, table=True):
     __tablename__ = "accounts"
     __table_args__ = (
-        CheckConstraint("balance >= 0", name="balance_non_negative"),
+        # Internal clearing accounts are exempt: a deposit debits clearing to
+        # credit the customer, so clearing legitimately runs negative. Only
+        # customer-facing accounts are held to a non-negative balance.
+        CheckConstraint(
+            "balance >= 0 OR account_type = 'internal'", name="balance_non_negative"
+        ),
         enum_check("status", AccountStatus, "status_valid"),
         enum_check("account_type", AccountType, "account_type_valid"),
     )
     
-    id : uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
+    id : uuid.UUID = Field(default_factory=_new_id, primary_key=True)
     balance : Decimal = money_field(
         default=Decimal("0"), sa_column_kwargs={"server_default": text("0")}
     )
@@ -214,7 +222,7 @@ class UserAccountActivity(SQLModel, table=True):
             enum_check("activity", UserAccountActivity, "account_activity_valid"),
         )    
     
-    id : uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
+    id : uuid.UUID = Field(default_factory=_new_id, primary_key=True)
     initiated_by : uuid.UUID = Field(foreign_key="users.id")
     activity : UserAccountActivity = Field(sa_type=String(20), 
                          nullable=False)
@@ -237,7 +245,7 @@ class Transaction(SQLModel, table=True):
     )
     
     
-    id : uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
+    id : uuid.UUID = Field(default_factory=_new_id, primary_key=True)
     idempotency_key : str = Field(nullable=False)
     initiated_by : uuid.UUID = Field(foreign_key="users.id")
     account_id: uuid.UUID = Field(foreign_key="accounts.id")
@@ -256,6 +264,7 @@ class Transaction(SQLModel, table=True):
         nullable=False,
         sa_column_kwargs={"server_default": text("'USD'")},
     )
+    destination_account_iban: Optional[str] = None
     description : Optional[str] = None
     failure_reason : Optional[str] = None
     reverse_transaction_id : Optional[uuid.UUID] = Field(foreign_key="transactions.id")
@@ -275,15 +284,20 @@ class LedgerEntry(SQLModel, table=True):
     __table_args__ = (
         CheckConstraint("amount > 0", name="amount_positive"),
         enum_check("direction", Direction, "direction_valid"),
-        Index("ix_ledger_account_created", "account_id", "created_at"),
+        Index("ix_ledger_account_created", "account_iban", "created_at"),
     )
     
     id : int = identity_pk()
     transaction_id : uuid.UUID = Field(foreign_key="transactions.id")
-    account_id : uuid.UUID = Field(foreign_key="accounts.id")
+    account_iban : str  
     direction: Direction = Field(sa_type=CHAR(1), nullable=False)
     amount : Decimal = money_field()
-    balance_after : Decimal = money_field()
+    # Nullable, so can't use money_field(): entries booked against an account
+    # this system doesn't hold (e.g. a transfer out to an external IBAN) have
+    # no balance to report. The entry still exists so the transaction balances.
+    balance_after : Optional[Decimal] = Field(
+        default=None, sa_type=Numeric(18, 2), nullable=True
+    )
     created_at : datetime = ts_field()
 
     transaction: Optional[Transaction] = Relationship(back_populates="ledger_entries")

@@ -96,12 +96,41 @@ services:
       DEBEZIUM_USER: ${DEBEZIUM_USER}
       DEBEZIUM_PASSWORD: ${DEBEZIUM_PASSWORD}
       DATABASE_NAME: ${DATABASE_NAME}
+      # Without this, Kafka Connect's JsonConverter wraps every message as
+      # {"schema": {...}, "payload": {before, after, op, ...}} — the fields
+      # our Flink envelope DDL (and kafka/consumers.py) expect at the top
+      # level actually live one level deeper, inside "payload", and every
+      # row silently fails to parse as a result.
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+
+  # waits for the app to have created its tables, then grants the debezium
+  # role SELECT and creates the publication those tables need. Separate from
+  # init_debezium_user.sh because this can't run during Postgres's own init
+  # (the tables don't exist yet at that point).
+  debezium-grants-init:
+    image: postgres:17
+    depends_on:
+      postgres:
+        condition: service_healthy
+      app:
+        condition: service_started
+    environment:
+      PGPASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_NAME: ${DATABASE_NAME}
+    volumes:
+      - ./scripts/grant_and_publish.sh:/grant_and_publish.sh:ro
+    entrypoint: ["sh", "/grant_and_publish.sh"]
 
   debezium-connector-init:
   # this throwaway container is used to send a post request to the kafka connect api with the connector config json
     image: curlimages/curl:latest
     depends_on:
-      - debezium
+      debezium:
+        condition: service_started
+      debezium-grants-init:
+        condition: service_completed_successfully
     volumes:
       - ./kafka/connect/postgres_connector.json:/connector.json:ro
       - ./kafka/connect/register-connector.sh:/register-connector.sh:ro
@@ -137,7 +166,16 @@ services:
     env_file: .env
     environment:
       DATABASE_HOSTNAME: postgres
+      # Container-to-container traffic hits Postgres' real port, not the
+      # host-side 5433 mapping. Pinned here so .env can carry 5433 for
+      # processes run on the host (the Kafka consumers, the Flink job)
+      # without breaking anything running in the compose network.
+      DATABASE_PORT: "5432"
       REDIS_HOST: redis
+      # without this, stdout is fully buffered (no TTY in the container),
+      # so print() output can sit unflushed and never reach `docker logs`
+      # until the buffer fills or the process exits
+      PYTHONUNBUFFERED: "1"
     ports:
       - "8000:8000"
     depends_on:

@@ -23,18 +23,16 @@ SCHEMA_PATH = "ml/models/feature_schema.json"
 TRANSACTION_TYPES = ["transfer", "deposit", "withdrawal", "fee", "reversal"]
 
 
-def featurize(df: pd.DataFrame, occupations: list[str]) -> pd.DataFrame:
+def featurize(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df["transaction_type"] = pd.Categorical(df["transaction_type"], categories=TRANSACTION_TYPES)
-    df["occupation"] = pd.Categorical(df["occupation"], categories=occupations)
-    return pd.get_dummies(df, columns=["transaction_type", "occupation"])
+    return pd.get_dummies(df, columns=["transaction_type"])
 
 
 def main():
     df = pd.read_csv(DATA_PATH)
-    occupations = sorted(df["occupation"].unique())
 
-    X = featurize(df.drop(columns=["is_fraud"]), occupations)
+    X = featurize(df.drop(columns=["is_fraud"]))
     y = df["is_fraud"]
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -59,7 +57,6 @@ def main():
             {
                 "columns": list(X.columns),
                 "transaction_types": TRANSACTION_TYPES,
-                "occupations": occupations,
             },
             f,
         )

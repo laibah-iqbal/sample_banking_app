@@ -8,9 +8,10 @@
     "database.password": "${env:DEBEZIUM_PASSWORD}",
     "database.dbname" : "${env:DATABASE_NAME}",
     "topic.prefix": "transactions",
-    "table.include.list": "public.transactions",
+    "table.include.list": "public.transactions,public.user_accountactivity",
     "plugin.name": "pgoutput",
     "publication.name": "debezium_publication", 
-    "publication.autocreate.mode": "disabled"
+    "publication.autocreate.mode": "disabled",
+    "decimal.handling.mode": "string"
   }
 }

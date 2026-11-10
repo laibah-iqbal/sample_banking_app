@@ -1,16 +1,14 @@
 """
 Synthetic dataset for bootstrapping a fraud classifier.
 
-Real data isn't available yet: `users` has no age/occupation columns, and
-there's no login-attempts source wired up in the pipeline. Shaped like the
-real transaction types, otherwise fully synthetic.
+There's no login-attempts source wired up in the pipeline yet. Shaped like
+the real transaction types, otherwise fully synthetic.
 
 Label rule: fraud = (login attempts in the last 30 min is unusually high)
 AND (transaction amount is unusually high). Either alone is not fraud.
 """
 import numpy as np
 import pandas as pd
-from faker import Faker
 
 N_ROWS = 20_000
 LOGIN_ATTEMPTS_THRESHOLD = 5
@@ -20,15 +18,11 @@ OUTPUT_PATH = "ml/data/fraud_dataset.csv"
 TRANSACTION_TYPES = ["transfer", "deposit", "withdrawal", "fee", "reversal"]
 TRANSACTION_TYPE_WEIGHTS = [0.5, 0.2, 0.2, 0.05, 0.05]
 
-fake = Faker()
-Faker.seed(42)
 rng = np.random.default_rng(42)
 
 
 def generate_row():
     transaction_type = rng.choice(TRANSACTION_TYPES, p=TRANSACTION_TYPE_WEIGHTS)
-    customer_age = int(np.clip(rng.normal(42, 15), 18, 90))
-    occupation = fake.job()
 
     # ~6% of rows are deliberately drawn from an "attack-shaped" regime:
     # a burst of login attempts shortly before an unusually large transaction.
@@ -43,7 +37,7 @@ def generate_row():
         amount = round(float(rng.lognormal(mean=5.0, sigma=1.1)), 2)
         login_attempts_last_30min = int(rng.poisson(1))
 
-    return transaction_type, amount, customer_age, occupation, login_attempts_last_30min
+    return transaction_type, amount, login_attempts_last_30min
 
 
 def main():
@@ -53,8 +47,6 @@ def main():
         columns=[
             "transaction_type",
             "amount",
-            "customer_age",
-            "occupation",
             "login_attempts_last_30min",
         ],
     )
