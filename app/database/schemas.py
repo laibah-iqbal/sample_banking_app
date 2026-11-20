@@ -276,7 +276,6 @@ class Transaction(SQLModel, table=True):
     
     ledger_entries: list["LedgerEntry"] = Relationship(back_populates="transaction")
 
-    
 
 class LedgerEntry(SQLModel, table=True):
     

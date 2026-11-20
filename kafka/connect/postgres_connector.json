@@ -8,10 +8,13 @@
     "database.password": "${env:DEBEZIUM_PASSWORD}",
     "database.dbname" : "${env:DATABASE_NAME}",
     "topic.prefix": "transactions",
-    "table.include.list": "public.transactions,public.user_accountactivity",
+    "table.include.list": "public.debezium_signal, public.transactions,public.user_accountactivity, public.ledger_entries, public.account_holders, public.users, public.accounts",
     "plugin.name": "pgoutput",
     "publication.name": "debezium_publication", 
     "publication.autocreate.mode": "disabled",
-    "decimal.handling.mode": "string"
+    "decimal.handling.mode": "string",
+    "column.exclude.list": "public.users.password_hash",
+    "tombstones.on.delete": "false",
+    "signal.data.collection": "public.debezium_signal"
   }
 }

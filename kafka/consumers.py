@@ -53,7 +53,7 @@ class FraudDetectionConsumer(CustomConsumer):
         """
         with Session(engine) as session:
             return helpers.settle_transaction(session, transaction_id, fraud_flag)
-
+    
     async def _process_message(self, msg):
         enriched = json.loads(msg.value.decode("utf-8"))
         print("enriched: ",enriched)

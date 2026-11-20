@@ -62,36 +62,10 @@ async def get_user_accounts(session: SessionDep, current_user: data_models.UserB
 @router.post("/account_history/{account_id}", response_model=list[data_models.LedgerEntry])
 async def select_account(account_id: str, session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):
     ledger_entries = session.exec(
-            select(schemas.LedgerEntry).where(schemas.LedgerEntry.account_id == account_id)
+            select(schemas.LedgerEntry, schemas.Transaction.destination_account_iban, schemas.Transaction.txn_type)
+            .join(schemas.Transaction, schemas.LedgerEntry.transaction_id == schemas.Transaction.id)
+            .where(schemas.LedgerEntry.account_id == account_id)
         ).all()
-    # join to ledger and transactions to get transaction type and receiver account
+    # implement pagination and filtering by date range
     return ledger_entries
 
-
-
-# @router.patch("", status_code=HTTP_501_NOT_IMPLEMENTED)
-# async def update_account_info(new_info: dict, session: SessionDep, current_user: data_models.UserBase = Depends(get_current_user)):
-#     # if delete user make user inactive
-#     # make any priamry single accounts inactive
-#     # pass off any joint accounts to joint as primary
-#     # only other fields that can be updated are password and address
-#     pass
-
-# Users
-# view accounts [DONE]
-# make user inactive 
-
-# Accounts
-# Create account (checking, savings)
-# add beneificiary or joint holder on account (separate process flow handled through kafka)
-# make account inactive
-# view account ledger
-
-# Transactions ( needs Redis, + Kafka implementation)
-# deposit
-# withdraw
-# fee
-# reversal
-# transfer
-# create transaction record
-# create ledger entry

@@ -12,6 +12,13 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
+# Baked into the image rather than bind-mounted so the image can migrate any
+# database it is pointed at, not just this compose project. alembic.ini sets
+# prepend_sys_path = %(here)s, which resolves to /code here, so alembic/env.py
+# can `import app.database...` with WORKDIR as it is.
+# Adding a revision therefore means rebuilding: docker compose build migrate
+COPY alembic.ini .
+COPY alembic ./alembic
 
 RUN useradd --create-home appuser
 USER appuser

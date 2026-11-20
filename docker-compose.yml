@@ -2,29 +2,28 @@ services:
   # this container is a temporary one to just give the debezium user creation script permissions to run
   # This container and the postgres container both bind-mount the same ./init-postgres directory
   # so once the file has been chmoded it can run at postgres container startup
-  fix-postgres-init-perms:
-    image: busybox
-    volumes:
-      - ./init-postgres:/scripts
-    command: ["sh", "-c", "chmod +x /scripts/*.sh"]
+  # fix-postgres-init-perms:
+  #   image: busybox
+  #   volumes:
+  #     - ./scripts:/scripts
+  #   command: ["sh", "-c", "chmod +x /scripts/*.sh"]
 
   postgres:
     image: postgres:17
     # logical replication is what Debezium's CDC connector reads from
     command: ["postgres", "-c", "wal_level=logical"]
-    depends_on:
-      fix-postgres-init-perms:
-        condition: service_completed_successfully
+    # depends_on:
+    #   fix-postgres-init-perms:
+    #     condition: service_completed_successfully
     environment:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
       DEBEZIUM_PASSWORD: ${DEBEZIUM_PASSWORD}
     volumes:
-      # bind mounts postgres_data on local host to /var/lib/postgresql/data on container
-      - ~/banking-app-volumes/postgres_data:/var/lib/postgresql/data
-      # everything in /docker-entrypoint-initdb.d runs at startup
-      - ./init-postgres:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data # this is a persisted volume 
+      # everything in /docker-entrypoint-initdb.d runs at startup so scripts is bind mounted to it
+      - ./scripts/init_debezium_user.sh:/docker-entrypoint-initdb.d/init_debezium_user.sh
     ports:
       - "5433:5432"
     healthcheck:
@@ -33,10 +32,34 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin:
+    image: dpage/pgadmin4:9.8
+    ports:
+      - 5050:80
+    environment:
+      # Required by pgAdmin
+      PGADMIN_DEFAULT_EMAIL: demo@example.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+      # Don't require the user to login
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      # Don't require a "master" password after logging in
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    configs:
+      - source: pgadmin-pgpass
+        target: /config/pgpass
+        uid: "5050"
+        gid: "5050"
+        mode: 0400
+      - source: pgadmin-servers
+        target: /pgadmin4/servers.json
+        mode: 0444
+
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -50,6 +73,8 @@ services:
     hostname: kafka
     ports:
       - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
@@ -64,14 +89,20 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_LOG_DIRS: "/tmp/kraft-combined-logs"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
     healthcheck:
       test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1"]
       interval: 10s
       timeout: 10s
       retries: 10
 
-  debezium:
+  # A Kafka Connect worker, not "Debezium" — the image is Connect with the
+  # Debezium source plugins preinstalled. Any connector, source or sink, runs
+  # as a task inside this one JVM; the Postgres CDC connector is just the
+  # first config POSTed to its REST API on :8083. An object-storage sink
+  # added later is decoupled from Debezium at the data level (it only reads
+  # Kafka topics) but still has to be installed as a plugin in this worker.
+  connect:
     image: quay.io/debezium/connect:3.7.0.Final
     ports:
       - "8083:8083"
@@ -80,9 +111,20 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+    volumes:
+      # One subdirectory per plugin under the image's plugin dir. Connect only
+      # scans this path at startup, so restart the service after adding one.
+      - ./kafka/connect/plugins/confluentinc-kafka-connect-s3-12.1.15:/kafka/connect/kafka-connect-s3:ro
     environment:
-      # internal PLAINTEXT listener — debezium is its own container, same as app
+      # internal PLAINTEXT listener — connect is its own container, same as app
       BOOTSTRAP_SERVERS: kafka:19092
+      # The image otherwise derives these by parsing the container's network
+      # interfaces, which on this host yields the literal string
+      # "ip_vti0@NONE:" — whose '@' and ':' break the entrypoint's own sed and
+      # kill the container before Connect ever starts. Same failure mode as
+      # Flink's MiniCluster binding to a shifting LAN IP: pin it, don't guess.
+      REST_HOST_NAME: 0.0.0.0
+      ADVERTISED_HOST_NAME: connect
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: debezium_connect_configs
       OFFSET_STORAGE_TOPIC: debezium_connect_offsets
@@ -96,6 +138,11 @@ services:
       DEBEZIUM_USER: ${DEBEZIUM_USER}
       DEBEZIUM_PASSWORD: ${DEBEZIUM_PASSWORD}
       DATABASE_NAME: ${DATABASE_NAME}
+      # ${env:...} in a connector JSON is resolved by EnvVarConfigProvider
+      # inside THIS worker process, not by the init container that POSTs the
+      # config — so the MinIO credentials have to exist here.
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       # Without this, Kafka Connect's JsonConverter wraps every message as
       # {"schema": {...}, "payload": {before, after, op, ...}} — the fields
       # our Flink envelope DDL (and kafka/consumers.py) expect at the top
@@ -103,18 +150,65 @@ services:
       # row silently fails to parse as a result.
       CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      
 
-  # waits for the app to have created its tables, then grants the debezium
-  # role SELECT and creates the publication those tables need. Separate from
-  # init_debezium_user.sh because this can't run during Postgres's own init
-  # (the tables don't exist yet at that point).
+  # Brings the schema up to head, then exits. This is the only thing that
+  # creates or alters tables now — app/main.py no longer calls create_all(),
+  # so there is a single schema owner and a single recorded schema version.
+  #
+  # Runs to completion before app starts, which means the API is never serving
+  # against a schema older than the code it was built from. Reuses
+  # banking-app:local because alembic/env.py imports app.database.schemas for
+  # its autogenerate metadata and app.database.connection for the URL, so the
+  # migrations need the application package on the path either way.
+  migrate:
+    build: .
+    image: banking-app:local
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Needed in full: alembic/env.py imports app.utils.config.settings, and
+    # pydantic validates every required field on that model at import time —
+    # secret_key and the Redis settings included, unused as they are here.
+    env_file: .env
+    environment:
+      DATABASE_HOSTNAME: postgres
+      # .env carries 5433 for host-run tooling (alembic, the fraud consumer,
+      # the Flink job). Inside the compose network Postgres is on its real
+      # port, so override it exactly as the app service does.
+      DATABASE_PORT: "5432"
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      # Shadows the copies the Dockerfile bakes in, so adding a revision takes
+      # effect on the next `up` with no `docker compose build`. The image keeps
+      # its own copy so it can still migrate on its own anywhere else; this
+      # mount is purely the local edit loop.
+      #
+      # Read-only because this service only ever runs `upgrade head`. New
+      # revisions are generated on the host, where .env points DATABASE_PORT
+      # at 5433. Python silently skips writing __pycache__ when it can't, so
+      # :ro costs nothing here.
+      - ./alembic:/code/alembic:ro
+      - ./alembic.ini:/code/alembic.ini:ro
+    # Overrides the image's uvicorn CMD. WORKDIR is /code, which is where both
+    # the mount above and the Dockerfile put alembic.ini, so alembic finds its
+    # config with no -c flag.
+    command: ["alembic", "upgrade", "head"]
+
+  # grants the debezium role SELECT and creates the publication its tables
+  # need. Separate from init_debezium_user.sh because this can't run during
+  # Postgres's own init (the tables don't exist yet at that point).
   debezium-grants-init:
     image: postgres:17
     depends_on:
       postgres:
         condition: service_healthy
-      app:
-        condition: service_started
+      # Was `app: service_started`, which only meant the app process had been
+      # launched — the script then polled for public.transactions to appear.
+      # migrate is the table creator now, and waiting for it to *complete*
+      # removes that race rather than retrying around it.
+      migrate:
+        condition: service_completed_successfully
     environment:
       PGPASSWORD: ${DATABASE_PASSWORD}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
@@ -123,46 +217,92 @@ services:
       - ./scripts/grant_and_publish.sh:/grant_and_publish.sh:ro
     entrypoint: ["sh", "/grant_and_publish.sh"]
 
-  debezium-connector-init:
-  # this throwaway container is used to send a post request to the kafka connect api with the connector config json
+  # throwaway container that POSTs every connector config to the Connect REST
+  # API. No longer Debezium-specific: it registers the Postgres source and the
+  # MinIO sink alike, since both are just configs for the same worker.
+  connector-init:
     image: curlimages/curl:latest
     depends_on:
-      debezium:
+      connect:
         condition: service_started
       debezium-grants-init:
         condition: service_completed_successfully
+      # the sink's target bucket has to exist before its tasks start writing
+      create-buckets:
+        condition: service_completed_successfully
     volumes:
-      - ./kafka/connect/postgres_connector.json:/connector.json:ro
-      - ./kafka/connect/register-connector.sh:/register-connector.sh:ro
+      # Mounted into a directory the script globs, so adding a connector is
+      # one more line here rather than an edit to the script.
+      - ./kafka/connect/postgres_connector.json:/connectors/postgres.json:ro
+      - ./kafka/connect/minio-connector.json:/connectors/minio.json:ro
+      - ./kafka/connect/register-connectors.sh:/register-connectors.sh:ro
     # invoked as `sh script.sh`, not executed directly, so no chmod +x needed
-    entrypoint: ["sh", "/register-connector.sh"]
+    entrypoint: ["sh", "/register-connectors.sh"]
 
     
-  jobmanager:
-    image: flink:latest
+  # No jobmanager/taskmanager services here on purpose. flink/create_enriched_stream.py
+  # sets 'pipeline.jars' to a local file:// path, which runs the job in a
+  # MiniCluster inside the local Python process — a standalone cluster in
+  # compose would never see that jar (it lives on the host, not in the image)
+  # and was sitting idle. Running it for real would also mean building a
+  # custom image, since the official flink image ships no PyFlink.
+  # Run the job with: flink/.venv-flink/bin/python -m flink.create_enriched_stream
+
+  minio:
+    image: alpine/minio:RELEASE.2025-10-15T17-29-55Z
+    container_name: minio
+    # The image runs as the non-root user "minio", but Docker creates a named
+    # volume owned by root:root — and it only inherits the image's ownership
+    # when the image ships content at the mount path, which MinIO doesn't. So
+    # /data comes up mode 755 root-owned and MinIO dies with "file access
+    # denied" creating /data/.minio.sys. Running as root is what MinIO's own
+    # compose examples do; the alternative is a one-shot chown sidecar like
+    # fix-postgres-init-perms.
+    user: "0:0"
     ports:
-      - "8081:8081"
-    command: jobmanager
+      - "9000:9000"    # S3 API
+      - "9001:9001"    # Web Console
     environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager        
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    command: server --console-address ":9001" /data
+    healthcheck:
+      # Not `mc ready local`: this image ships no mc and no curl, so that
+      # check could only ever fail, leaving every service that waits on
+      # service_healthy blocked forever. wget is present, and --spider exits
+      # non-zero on any non-2xx.
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  taskmanager:
-    image: flink:latest
+  # Creates the buckets the S3 sink writes into, then exits. Uses boto3 from
+  # the app image rather than `mc`: MinIO distributes its community edition as
+  # source only now and has withdrawn its public container images, and the
+  # alpine/minio server image above ships no mc binary at all. Talking to the
+  # S3 API directly adds no image and nothing to re-pull.
+  create-buckets:
+    build: .
+    image: banking-app:local
     depends_on:
-      - jobmanager
-    command: taskmanager
-    scale: 1
+      minio:
+        condition: service_healthy
     environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 2        
-
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKETS: bronze,warehouse
+    volumes:
+      - ./scripts/create_buckets.py:/create_buckets.py:ro
+    entrypoint: ["python", "/create_buckets.py"]
 
   app:
     build: .
+    # Tagged explicitly so create-buckets can reuse this exact image instead
+    # of compose building the same context twice under two generated names.
+    image: banking-app:local
     env_file: .env
     environment:
       DATABASE_HOSTNAME: postgres
@@ -183,10 +323,40 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      # The app no longer builds its own tables, so it must not start until
+      # the schema is at head.
+      migrate:
+        condition: service_completed_successfully
 
 # # to persist db data when docker-compose down
 # commented out volumes since I've bind mounted local directories to persist data.
 # if i had left this, the volumes would have been persisted in this directory but on the Linux VM that Docker is running on
 # not my local filesystem so although it would be persisted I wouldn't be able to access it.
-# volumes:
-#   postgres_data:
+volumes:
+    postgres_data:
+    minio_data:
+    redis_data:
+    kafka_data:
+
+
+configs:
+  pgadmin-servers:
+    content: |
+      {
+        "Servers": {
+          "1": {
+            "Name": "Local Postgres",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "${DATABASE_NAME}",
+            "Username": "${DATABASE_USERNAME}",
+            "PassFile": "/config/pgpass",
+            "SSLMode": "prefer"
+          }
+        }
+      }
+  
+  pgadmin-pgpass:
+    content: |
+      postgres:5432:*:${DATABASE_USERNAME}:${DATABASE_PASSWORD}
