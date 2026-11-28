@@ -6,3 +6,6 @@ flink/.venv-flink/
 .vscode/
 learnings.md
 postgres.md
+testuserdetails.txt
+minio.license
+dbt/target

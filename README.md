@@ -6,24 +6,34 @@ I am building it in stages, so some parts of the architecture below are working 
 
 ## Contents
 
-- [Project status](#project-status)
-- [Architecture](#architecture)
-- [Transaction lifecycle](#transaction-lifecycle)
-- [Data modelling](#data-modelling)
-- [Database migrations](#database-migrations)
-- [Change data capture](#change-data-capture)
-- [The lakehouse layers](#the-lakehouse-layers)
-- [Design decisions](#design-decisions)
-- [Fraud detection model](#fraud-detection-model)
-- [Getting started](#getting-started)
-- [Using the API](#using-the-api)
-- [Repo structure](#repo-structure)
-- [Security](#security)
-- [Known gaps](#known-gaps)
-- [Testing, observability and load testing](#testing-observability-and-load-testing)
-- [Using AI in the pipeline](#using-ai-in-the-pipeline)
-- [Deployment](#deployment)
-- [Things I learned along the way](#things-i-learned-along-the-way)
+- [Banking App Data Architecture](#banking-app-data-architecture)
+  - [Contents](#contents)
+  - [Project status](#project-status)
+  - [Architecture](#architecture)
+  - [Transaction lifecycle](#transaction-lifecycle)
+  - [Data modelling](#data-modelling)
+  - [Change data capture](#change-data-capture)
+  - [The lakehouse layers](#the-lakehouse-layers)
+  - [Design decisions](#design-decisions)
+  - [Fraud detection model](#fraud-detection-model)
+  - [Getting started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [1. Set up environment variables](#1-set-up-environment-variables)
+    - [2. Add the MinIO license](#2-add-the-minio-license)
+    - [3. Start the stack](#3-start-the-stack)
+    - [4. Check the connectors and the Flink job](#4-check-the-connectors-and-the-flink-job)
+    - [5. Seed some data](#5-seed-some-data)
+    - [6. Post a transaction](#6-post-a-transaction)
+    - [7. Run dbt](#7-run-dbt)
+    - [8. Retrain the fraud model (optional)](#8-retrain-the-fraud-model-optional)
+    - [Running the Flink job or consumer on the host](#running-the-flink-job-or-consumer-on-the-host)
+  - [Using the API](#using-the-api)
+  - [Repo structure](#repo-structure)
+  - [Security](#security)
+  - [Known gaps](#known-gaps)
+  - [Testing, observability and load testing](#testing-observability-and-load-testing)
+  - [Using AI in the pipeline](#using-ai-in-the-pipeline)
+  - [Deployment](#deployment)
 
 ## Project status
 
@@ -33,16 +43,15 @@ I am building it in stages, so some parts of the architecture below are working 
 | Transactional schema (PostgreSQL + SQLModel) | ✅ Built | Users, accounts, account holders, login activity, transactions and a double-entry ledger. |
 | Redis idempotency layer | ✅ Built | Wired into the `/transactions` endpoint. |
 | Transaction processing | ✅ Built | Deposits, withdrawals and transfers post balanced double-entry ledger rows under a row lock, and settle the transaction in the same commit. |
-| Alembic migrations | ✅ Built | Three revisions. A `migrate` service runs `alembic upgrade head` to completion before the app starts. Alembic is now the only schema owner — `create_all()` is gone. |
-| Debezium CDC into Kafka | ✅ Built | All six tables streamed from the WAL through a self-managed publication. `REPLICA IDENTITY FULL` on the mutable tables, so updates carry a full before-image. |
-| MinIO (S3) bronze layer | ✅ Built | A Confluent S3 sink connector writes CDC events to the `bronze` bucket as newline-delimited JSON, partitioned by `event_date`. Verified landing. |
+| Alembic migrations | ✅ Built |  A `migrate` service runs `alembic upgrade head` to completion before anything that needs the tables starts.  |
+| Debezium CDC into Kafka | ✅ Built | All six tables streamed from the WAL through a publication created by an Alembic revision.  |
+| Apache Flink job | ✅ Built | `create_enriched_stream.py` joins login activity to transactions. Runs on a Flink session cluster in Compose and checkpoints every 30 seconds — see [Design decisions](#design-decisions). |
 | Fraud detection model | ✅ Trained | XGBoost trained on a synthetic dataset. |
-| Fraud scoring consumer | ✅ Built | Scores the enriched stream, settles the transaction and caches the idempotent response. Runs on the host; not dockerized yet. |
-| Docker Compose stack | ✅ Built | Postgres, Redis, Kafka, Kafka Connect, MinIO, pgAdmin, the app, and four one-shot init services that run in dependency order. |
+| Fraud scoring consumer | ✅ Built | Scores the enriched stream, settles the transaction and caches the idempotent response. Runs as the `consumers` Compose service and restarts if it dies. |
+| MinIO (S3) bronze layer | ✅ Built | MinIO AIStor. A Confluent S3 sink connector writes CDC events to the `bronze` bucket as Snappy-compressed Parquet, partitioned by `event_date`. Verified landing for all six tables. |
+| Docker Compose stack | ✅ Built |  |
 | pgAdmin | ✅ Built | Server connection and `.pgpass` are generated from `.env` via Compose `configs`, so there is nothing to click through on first run. |
-| Apache Flink job | 🚧 In progress | `create_enriched_stream.py` joins login activity to transactions. Runs in a local MiniCluster rather than a Compose service — see [Design decisions](#design-decisions). |
-| Account history endpoint | 🚧 In progress | Returns ledger entries for an account; joins to transactions still to do. |
-| dbt silver + gold on DuckDB | 📋 Planned | Bronze will be read in place as a DuckDB external source rather than loaded. See [The lakehouse layers](#the-lakehouse-layers). |
+| dbt on DuckDB | 🚧 In progress | dbt reads the bronze Parquet in place from MinIO. All six tables are declared as sources and verified readable; the staging, silver and gold models are still to do. See [The lakehouse layers](#the-lakehouse-layers). |
 | Airflow batch pipeline | 📋 Planned | |
 | Tests, CI/CD, Terraform, cloud hosting | 📋 Planned | |
 | Observability and Locust load testing | 📋 Planned | |
@@ -52,17 +61,17 @@ I am building it in stages, so some parts of the architecture below are working 
 
 <img width="702" height="642" alt="Architecture diagram of the banking app data platform" src="https://github.com/user-attachments/assets/f8baf9b2-9a32-4d01-ab64-d70b53c71450" />
 
-<!-- TODO: redraw. The diagram still shows Flink as a cluster service and MinIO/dbt as planned; it also predates the DuckDB decision and the Kafka Connect S3 sink. -->
+<!-- TODO: redraw. Flink as a cluster service is accurate again, but the diagram still shows MinIO/dbt as planned and predates the DuckDB decision and the Kafka Connect S3 sink. -->
 
 - **FastAPI app:** An API with endpoints for user registration, login, viewing accounts and initiating banking transactions (deposits, withdrawals and transfers). Endpoints are protected with OAuth2 and JWT tokens. A Locust file will send simulated traffic to the app to test the latency and load handling of the architecture.
 - **PostgreSQL:** The transactional (OLTP) database for the app. Runs with `wal_level=logical` so Debezium can read the write-ahead log.
 - **Redis cache:** Used to make transactions idempotent. When a transaction comes in, the app checks Redis for the same idempotency key. If it isn't there, the key is locked and the transaction is inserted into Postgres with status `pending`. If a request with the same key and payload arrives again, it is not processed a second time; if the payload has changed under the same key, it is rejected. Once a transaction is processed, the result is cached for 24 hours so retries get the same response straight away. Redis pub/sub is also how the fraud consumer wakes a waiting request.
 - **Apache Kafka + Debezium:** This keeps transaction processing from slowing down the app. Debezium reads Postgres' WAL and streams changes to Kafka as an event stream. Kafka runs in KRaft mode, so there is no ZooKeeper.
-- **Kafka Connect:** Runs two connectors — the Debezium Postgres source, and a Confluent S3 sink that writes every CDC topic into the MinIO `bronze` bucket.
-- **Apache Flink:** Joins login activity to transactions to produce a `login_attempts_last_30min` count per transaction, which is a feature the fraud model needs. The output goes to the `transaction_login_attempts` topic through an `upsert-kafka` sink.
+- **Kafka Connect:** Runs two connectors — the Debezium Postgres source, and a Confluent S3 sink that writes every CDC topic into the MinIO `bronze` bucket. The worker registers both connectors itself on startup, and its health check only passes once both are running.
+- **Apache Flink:** Joins login activity to transactions to produce a `login_attempts_last_30min` count per transaction, which is a feature the fraud model needs. The output goes to the `transaction_login_attempts` topic through an `upsert-kafka` sink. The job runs on a Flink session cluster (a jobmanager and a taskmanager) in Compose.
 - **Fraud consumer:** Reads the enriched stream, scores each transaction with the XGBoost model, then posts the ledger and settles the transaction. It is the single writer for settlement.
-- **MinIO (S3):** The bronze layer of the lakehouse. Raw CDC events land here so the analytical side reads from object storage instead of putting load on the transactional database.
-- **DuckDB + dbt:** Will model bronze into silver and gold. DuckDB reads the bronze JSON directly out of MinIO over `httpfs`.
+- **MinIO (S3):** The bronze layer of the lakehouse, running the AIStor edition. Raw CDC events land here as Parquet so the analytical side reads from object storage instead of putting load on the transactional database.
+- **DuckDB + dbt:** Models bronze into silver and gold. DuckDB reads the bronze Parquet directly out of MinIO over `httpfs`. The sources are in place; the silver and gold models are next.
 - **Airflow:** Will orchestrate the batch runs.
 
 ## Transaction lifecycle
@@ -112,55 +121,12 @@ Settlement lives in the consumer rather than the request handler so that a clien
 <!--
 TODO (Laibah): transactional and analytical database modelling section.
 
-Points you might want to cover from the current schema:
-- Tables: users, accounts, account_holders (many-to-many: primary / joint / beneficiary), user_accountactivity, transactions, ledger_entries.
-- Double-entry ledger: direction (D/C), amount and balance_after on every entry.
-- UUIDv7 primary keys (time-ordered, so inserts stay index-friendly) and a BIGINT identity key on the ledger.
-- Money stored as NUMERIC(18,2), never floats.
-- CHECK constraints generated from the Python enums, non-negative balances, positive amounts.
-- The internal clearing account and why it is exempt from the non-negative balance check.
-- Unique (initiated_by, idempotency_key) as a second line of defence behind Redis.
-- Composite indexes for the main access patterns (transactions by user/status and time, ledger by account and time).
-- No ON DELETE CASCADE on transactions and ledger entries, so the financial record is never lost.
-- Deterministic constraint naming for Alembic.
-- Analytical side: how the dbt silver / gold layers will be modelled.
+
 -->
-
-One thing worth stating up front, because it shapes the seed script: **`accounts.balance` is not independent data.** It is the running total of that account's ledger entries, maintained under a row lock as each entry is posted. Seeding a non-zero opening balance with no matching ledger rows would make the double-entry invariant false from the first row, so `seed_data.py` opens every account at zero. To fund an account you post a deposit, which moves the balance and the ledger together.
-
-## Database migrations
-
-Alembic owns the schema. The app no longer calls `create_all()` at startup, because two schema owners is worse than one: on a fresh database whichever ran first would build the tables, and if that was `create_all()` there would be no `alembic_version` row, so Alembic would think it was at base and try to create everything again. `create_all()` also only ever `CREATE`s missing tables and never `ALTER`s an existing one — which is how the `transactions.txn_type` CHECK constraint went on accepting `'fee'` and `'reversal'` long after they were dropped from the `TxnType` enum.
-
-The three revisions are:
-
-| Revision | What it does |
-| :--- | :--- |
-| `f8efcb7a2b73` | Baseline. Generated against an empty database, so it contains full `CREATE TABLE`s and can build the schema from zero. |
-| `195721f396f8` | Drops `'fee'` and `'reversal'` from the `txn_type` CHECK constraint — the one real piece of drift the baseline exposed. |
-| `07d9e6820274` | Sets `REPLICA IDENTITY FULL` on `accounts`, `users` and `account_holders`. |
-
-Migrations run as their own Compose service:
-
-```yaml
-migrate:
-  command: ["alembic", "upgrade", "head"]
-```
-
-Everything that needs the tables to exist waits on `migrate` with `condition: service_completed_successfully`, so there is no polling and no race. `alembic.ini` deliberately has **no** `sqlalchemy.url`; the URL is built in `alembic/env.py` from the same settings object the app uses, so there is one source of truth and no password in a committed file.
-
-**Adding a revision:**
-
-```bash
-.venv/bin/alembic revision --autogenerate -m "what changed"
-docker compose up migrate
-```
-
-The `alembic/` directory and `alembic.ini` are bind-mounted read-only into the `migrate` service as well as baked into the image, so a new revision does not need an image rebuild during development.
 
 ## Change data capture
 
-Debezium reads the WAL through a publication the project creates itself (`publication.autocreate.mode=disabled`), with `SELECT` granted to a dedicated `debezium` replication user on only the tables it needs.
+Debezium reads the WAL through a publication the project creates itself (`publication.autocreate.mode=disabled`), with `SELECT` granted to a dedicated `debezium` replication user on only the tables it needs. Both come from Alembic revision `3e8fc76400cc`.
 
 A few connector settings are load-bearing:
 
@@ -168,26 +134,30 @@ A few connector settings are load-bearing:
 - **`REPLICA IDENTITY FULL`** on the mutable tables, so an update event carries the complete previous row in `before`. That makes an account's prior balance available for free, instead of only being derivable by replaying the whole ledger. It is not set on `ledger_entries` or `user_accountactivity`, which are append-only, nor on `transactions`, which is the highest-write table and whose status transitions are already recoverable from the ordered event stream.
 - **`tombstones.on.delete=false`** — a delete arrives as a single `op: "d"` event with `before` populated, instead of that event plus a separate null-valued tombstone. Paired with `behavior.on.null.values=ignore` on the sink, this is what makes deletes visible in bronze at all.
 - **`column.exclude.list=public.users.password_hash`** — password hashes are dropped at the source and never enter Kafka or object storage.
+- **`CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=true`** on the Connect worker — the S3 sink can only write Parquet when every record carries its schema, so each Kafka message is wrapped as `{"schema": {...}, "payload": {before, after, op, ...}}`. The Flink job reads raw message bytes, so its table definitions go through that `payload` wrapper. Bronze never sees the wrapper, because the sink turns the schema into Parquet columns.
 
 ## The lakehouse layers
 
-**Bronze** is the raw CDC event log in MinIO: one object per Kafka batch, newline-delimited JSON, Hive-partitioned as `event_date=YYYY-MM-DD`. Records are the full Debezium envelope, because there is no `ExtractNewRecordState` transform:
+**Bronze** is the raw CDC event log in MinIO: Snappy-compressed Parquet, a new file per topic every 60 seconds (or every 100,000 records, whichever comes first), Hive-partitioned as `event_date=YYYY-MM-DD`. Each row is the full Debezium envelope, because there is no `ExtractNewRecordState` transform, so `op`, `before`, `after`, `source` and `ts_ms` are top-level columns:
 
-```json
-{"op":"u","before":{...,"balance":"0.00"},"after":{...,"balance":"100.00"},"ts_us":...,"source":{...}}
+```text
+op | before                 | after                    | source            | ts_ms | event_date
+u  | {..., balance: "0.00"} | {..., balance: "100.00"} | {lsn, txId, ...}  | ...   | 2026-11-26
 ```
 
-**Silver** will be built with dbt on DuckDB — and deliberately **not** with a dbt Python model. DuckDB reads MinIO natively over `httpfs`, so bronze is declared as an external source and read in place:
+**Silver** will be built with dbt on DuckDB. DuckDB reads MinIO natively over `httpfs`, so each bronze table is declared as an external source and read in place.
 
 ```yaml
 sources:
-  - name: bronze
-    meta:
-      external_location: "s3://bronze/topics/transactions.public.{name}/*/*.json"
-      external_options: { format: newline_delimited, hive_partitioning: true }
+  - name: minio_raw
+    tables:
+      - name: transactions
+        config:
+          external_location: "read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)"
 ```
 
-A Python model would pull bronze into pandas and hand the result back to DuckDB, which costs predicate and projection pushdown and moves the whole scan through Python memory. The transform here is JSON unnesting, casting and dedup — all of it plain SQL. Python models are for what SQL genuinely cannot express.
+`union_by_name` is there because the sink runs with `schema.compatibility=NONE`, so files written before and after a column change disagree on columns, and the scan would fail without it. The MinIO credentials reach DuckDB through an S3 secret in the project-local `dbt/profiles.yml`. All six sources are declared and verified readable, and `stg_transactions` is a smoke-test view over the raw envelope. The staging, silver and gold models are next.
+
 
 Two consequences of bronze being an event log rather than a snapshot:
 
@@ -204,7 +174,9 @@ Two consequences of bronze being an event log rather than a snapshot:
 - **Hashing the request body.** The idempotency layer stores a SHA-256 hash of the payload with the key. If a client reuses a key with a different body, the request is rejected instead of silently returning the old result.
 - **The consumer is the single writer for settlement.** The request handler never posts the ledger itself, even when a verdict arrives while it is still waiting — it re-reads the row instead. Two settlement paths racing on the same transaction is exactly the thing worth avoiding.
 - **Named volumes rather than bind mounts.** This reverses an earlier decision. Bind-mounting to `~/banking-app-volumes` kept the Postgres data where I could read it, but it also meant the container inherited host file ownership, and a bind mount hides whatever the image ships at that path. Named volumes pre-populate from the image and are what `docker compose down -v` is scoped to, which makes a deliberate reset a one-liner. The data is still reachable — `docker compose exec` — just not from Finder.
-- **Flink runs in a local MiniCluster, not a Compose service.** `create_enriched_stream.py` sets `pipeline.jars` to a local `file://` path. A standalone cluster in Compose would never see that jar, since it lives on the host rather than in the image, and the official Flink image ships no PyFlink — so running it for real would mean building a custom image. The jobmanager and taskmanager services were sitting idle, so they are gone.
+
+- **Bronze as Parquet rather than JSON.** Parquet is columnar, compressed and typed, so DuckDB reads only the columns a model needs instead of parsing every JSON line. The cost is that the Connect worker has to run with converter schemas enabled — see [Change data capture](#change-data-capture).
+- **MinIO AIStor rather than the community image.** MinIO's community edition is source-only now and its public container images were withdrawn. AIStor needs a license file, mounted from `minio/minio.license` (gitignored). The AIStor image ships `mc`, so the `createbuckets` one-shot reuses the same image instead of pulling another one.
 - **A separate store for batch analytics.** Batch pipelines read from MinIO rather than the production database, so analytics never competes with live transactions.
 - **Least-privilege CDC.** Debezium connects as its own replication user with `SELECT` on only the tables it needs, through a publication I create myself.
 - **Kafka in KRaft mode.** Kafka 4 runs without ZooKeeper, so there is one fewer service to run and configure.
@@ -230,8 +202,10 @@ Because the labels come from a fixed rule, the model should score almost perfect
 ### Prerequisites
 
 - Docker and Docker Compose
-- Python 3.14 (the schema uses `uuid.uuid7()` from the standard library), for running the seed script, consumer and model training locally
-- Python 3.11 for the Flink job only — PyFlink does not support 3.14 yet, so it gets its own virtualenv
+- An AIStor license file for MinIO
+- Python 3.14 (the schema uses `uuid.uuid7()` from the standard library), for running the seed script and model training locally
+- dbt 2.x with the DuckDB driver installed through `dbc install duckdb` (the driver bundled with dbt can't load the `httpfs` extension)
+- Python 3.11, only if you want to run the Flink job on the host — PyFlink does not support 3.14 yet, so it gets its own virtualenv
 
 ### 1. Set up environment variables
 
@@ -263,11 +237,13 @@ MINIO_ROOT_USER=minioadmin
 MINIO_ROOT_PASSWORD=change-me-as-well
 ```
 
-`DATABASE_PORT=5433` is the **host-side** port, for scripts run on your laptop. Inside the Compose network the app and migrate services override it to `5432`, Postgres' real port, and override `DATABASE_HOSTNAME` to `postgres` and `REDIS_HOST` to `redis`.
+`DATABASE_PORT=5433` is the **host-side** port, for scripts run on your laptop. Inside the Compose network, `app`, `migrate` and `consumers` override `DATABASE_HOSTNAME` to `postgres` and `DATABASE_PORT` to `5432`, Postgres' real port, and `app` and `consumers` override `REDIS_HOST` to `redis`. Inside a container `localhost` is the container itself, so without those overrides a service fails with `Connection refused` even while Postgres reports it is ready.
 
-### 2. Download the S3 sink connector plugin
+### 2. Add the MinIO license
 
-Kafka Connect only scans its plugin path at startup, and the Debezium image does not ship the Confluent S3 sink. Extract it to `kafka/connect/plugins/confluentinc-kafka-connect-s3-12.1.15`, which is the path the `connect` service mounts.
+Put your AIStor license at `minio/minio.license`. The `minio` service mounts it, and it is gitignored.
+
+The Confluent S3 sink plugin that Kafka Connect needs is already committed under `kafka/connect/plugins/`, which is the path the `connect` service mounts, so there is nothing to download.
 
 ### 3. Start the stack
 
@@ -277,12 +253,17 @@ docker compose up -d --build
 
 Services come up in dependency order through health checks and `service_completed_successfully` gates:
 
-```
-postgres (healthy) ──► migrate ──► debezium-grants-init ──┐
-minio (healthy) ──► create-buckets ──────────────────────┤──► connector-init
-kafka (healthy) ──► connect ─────────────────────────────┘
-                       migrate ──► app
-```
+| Service | Starts once |
+| :--- | :--- |
+| `migrate` | Postgres is healthy |
+| `createbuckets` | MinIO is healthy |
+| `connect` | Kafka and Postgres are healthy, and `migrate` and `createbuckets` have finished |
+| `app` | Postgres and Redis are healthy and `migrate` has finished |
+| `consumers` | Postgres, Redis and Kafka are healthy and `migrate` has finished |
+| `jobmanager`, `taskmanager` | `flink-dirs-init` has fixed the checkpoint volume ownership |
+| `flink-job` | The jobmanager has started, Kafka is healthy, and `connect` is healthy |
+
+`connect` registers both connectors itself on startup and only reports healthy once both are running, which is the gate `flink-job` waits on.
 
 | Service | URL |
 | :--- | :--- |
@@ -290,17 +271,18 @@ kafka (healthy) ──► connect ───────────────�
 | pgAdmin | `http://localhost:5050` |
 | MinIO console | `http://localhost:9001` |
 | Kafka Connect | `http://localhost:8083` |
+| Flink web UI | `http://localhost:8081` |
 
 pgAdmin has its server connection and `.pgpass` generated from `.env` through Compose `configs`, so the `banking_app_v2` database is already there when you open it. Note that the connection uses host `postgres` and port `5432` — the in-network values, not the `5433` your laptop uses.
 
-### 4. Check the connectors
+### 4. Check the connectors and the Flink job
 
 ```bash
-curl -s localhost:8083/connectors/postgres-connector/status
-curl -s localhost:8083/connectors/minio-sink-connector/status
+curl -s localhost:8083/connectors?expand=status
+curl -s localhost:8081/jobs/overview
 ```
 
-Both the connector and its task should show `RUNNING`.
+Both connectors and their tasks should show `RUNNING`, and so should the Flink job. On a fresh Kafka volume the job shows `RESTARTING` until Debezium has created its input topics. It recovers on its own after the first login and transaction.
 
 ### 5. Seed some data
 
@@ -314,32 +296,51 @@ python seed_data.py
 
 This creates the internal clearing account, 8 customers, and 12 accounts with a mix of primary, joint and beneficiary holders. Faker is seeded with a fixed value, so you get the same people and IBANs every time, and the script matches on natural keys so re-running it is a no-op. Every seeded user shares one password, printed at the end.
 
-### 6. Run the Flink job
+Seed before posting any transactions: settlement posts against the internal clearing account, and every settlement fails with `NoResultFound` until it exists.
+
+### 6. Post a transaction
+
+Log in, then start a transaction with the token (see [Using the API](#using-the-api)). The transaction goes through Debezium, Flink and the fraud consumer, and settles within a few seconds. Log in *after* the connectors are running: Flink only counts logins Debezium captured as new rows, so a login from before registration doesn't count, and the transaction waits — see [Known gaps](#known-gaps).
+
+### 7. Run dbt
 
 ```bash
-python3.11 -m venv flink/.venv-flink
-flink/.venv-flink/bin/pip install "setuptools<81"
-flink/.venv-flink/bin/pip install --no-build-isolation -r flink/requirements.txt
-flink/.venv-flink/bin/python -m flink.create_enriched_stream
+cd dbt
+set -a; source ../.env; set +a   # the DuckDB S3 secret reads MINIO_ROOT_USER and MINIO_ROOT_PASSWORD
+dbt run --profiles-dir .
 ```
 
-### 7. Run the fraud consumer
+The profile is project-local, so `--profiles-dir .` keeps dbt from reading `~/.dbt/profiles.yml`. Bronze files land on a 60-second schedule, so a change from the last minute may not show up yet.
 
-```bash
-python kafka/consumers.py
-```
+### 8. Retrain the fraud model (optional)
 
-Create a transaction through the API and you should see it scored and settled.
-
-### 8. Train the fraud model
+The trained model is committed and baked into the `consumers` image, so this is only needed to retrain:
 
 ```bash
 pip install -r ml/requirements.txt
 python ml/generate_dataset.py
 python ml/train_fraud_model.py
+docker compose up -d --build consumers
 ```
 
-This writes `ml/models/fraud_model.json` and `ml/models/feature_schema.json`.
+This rewrites `ml/models/fraud_model.json` and `ml/models/feature_schema.json`, and the rebuild picks them up.
+
+### Running the Flink job or consumer on the host
+
+Compose runs both, but the host is quicker to iterate on. Stop the Compose copy first so the two don't compete for the same events. The host job's MiniCluster also puts its web UI on port 8081, the same as the Compose jobmanager.
+
+```bash
+# Flink job: stopping the jobmanager also ends the job running on the cluster
+docker compose stop jobmanager taskmanager
+python3.11 -m venv flink/.venv-flink
+flink/.venv-flink/bin/pip install "setuptools<81"
+flink/.venv-flink/bin/pip install --no-build-isolation -r flink/requirements.txt
+flink/.venv-flink/bin/python -m flink.create_enriched_stream
+
+# Fraud consumer
+docker compose stop consumers
+python kafka/consumers.py
+```
 
 ## Using the API
 
@@ -348,7 +349,6 @@ This writes `ml/models/fraud_model.json` and `ml/models/feature_schema.json`.
 | `POST` | `/users` | No | Register a user. Also creates an account and links the user to it. |
 | `POST` | `/login` | No | Log in with email and password; returns a JWT access token. |
 | `GET` | `/users/accounts` | Yes | List the current user's accounts. |
-| `POST` | `/users/account_history/{account_id}` | Yes | Ledger entries for an account (in progress). |
 | `POST` | `/transactions` | Yes | Start a transaction. Needs an `Idempotency-Key` header. |
 | `GET` | `/transactions/{id}` | Yes | Poll a transaction's status. |
 
@@ -395,21 +395,29 @@ sample_banking_app/
 │                            #   ledger posting and settlement helpers
 ├── alembic/
 │   ├── env.py               # builds the URL from app settings; no URL in alembic.ini
-│   └── versions/            # three revisions (baseline, txn_type CHECK, replica identity)
+│   └── versions/            # four revisions (baseline, txn_type CHECK, replica identity,
+│                            #   CDC grants + publication)
 ├── scripts/
-│   ├── init_debezium_user.sh  # runs in docker-entrypoint-initdb.d
-│   ├── grant_and_publish.sh   # grants + CREATE PUBLICATION, after migrate
-│   └── create_buckets.py      # creates the bronze and warehouse buckets
+│   └── init_debezium_user.sh  # runs in docker-entrypoint-initdb.d
 ├── kafka/
 │   ├── connect/
 │   │   ├── postgres_connector.json    # Debezium source
-│   │   ├── minio-connector.json       # Confluent S3 sink
-│   │   ├── register-connectors.sh     # globs /connectors/*.json
-│   │   └── plugins/                   # S3 sink plugin (not committed)
-│   └── consumers.py         # fraud scoring + settlement consumer
+│   │   ├── minio-connector.json       # Confluent S3 sink (Parquet)
+│   │   ├── register-connectors.sh     # runs inside the connect container; globs /connectors/*.json
+│   │   └── plugins/                   # Confluent S3 sink plugin
+│   ├── consumers.py         # fraud scoring + settlement consumer
+│   └── Dockerfile           # consumers image, with the fraud model baked in
 ├── flink/
 │   ├── create_enriched_stream.py  # login-activity join, upsert-kafka sink
-│   └── utils.py                   # builds Debezium envelope DDL from a SQLModel
+│   ├── utils.py                   # builds Debezium envelope DDL from a SQLModel
+│   ├── lib/                       # Kafka SQL connector jar
+│   └── Dockerfile                 # Flink + PyFlink; shared by jobmanager, taskmanager and flink-job
+├── dbt/
+│   ├── dbt_project.yml
+│   ├── profiles.yml         # project-local DuckDB profile, with the MinIO S3 secret
+│   └── models/              # bronze sources and staging; silver/ and gold/ to come
+├── minio/
+│   └── minio.license        # AIStor license (gitignored)
 ├── ml/
 │   ├── generate_dataset.py  # synthetic fraud dataset
 │   ├── train_fraud_model.py # XGBoost training
@@ -464,18 +472,3 @@ This is the secondary aim of the project and is planned for once the core pipeli
 - **GitHub Actions:** Planned, for running tests and deploying on every push.
 - **Cloud hosting:** Planned, on AWS.
 
-## Things I learned along the way
-
-- **Kafka listeners in Docker.** Containers and the host machine need different listeners. Other containers reach Kafka at `kafka:19092`, while scripts on my laptop use `localhost:9092`. Mixing these up is why Kafka can work from one place and not another, so I kept them separate on purpose. The same split applies to Postgres: `postgres:5432` inside the network, `localhost:5433` outside.
-- **Waiting for Kafka Connect properly.** Connect's port opens before its REST API is ready and returns a `404` in the meantime, which `curl`'s own retry treats as success. The registration script retries until it gets a real `201` (or `409` if the connector already exists).
-- **Named volumes vs bind mounts, revisited.** My first conclusion was that bind mounts win because the data stays on my own filesystem. What I missed is that a bind mount *hides* whatever the image ships at that path and never copies it, while a named volume pre-populates from the image and inherits its ownership. That matters for Postgres' `PGDATA` and for MinIO's `/data` — MinIO ships no content there, so its named volume comes up root-owned and MinIO dies creating `.minio.sys`. I moved everything to named volumes.
-- **Postgres only runs its init scripts on an empty `PGDATA`.** A stale volume from an earlier run meant `docker-entrypoint-initdb.d` was skipped entirely, so the new database and the `debezium` role were never created — and the only symptom was `FATAL: database "banking_app_v2" does not exist`. Worth checking the volume before debugging anything else.
-- **Postgres *sources* non-executable `.sh` init scripts** rather than skipping them, so the chmod sidecar I had been running was never needed. Worse, `chmod +x /scripts/*.sh` exits `1` on an empty glob, which failed the sidecar and left Postgres waiting on it forever.
-- **Alembic feeds constraint names through the metadata's naming convention.** Passing the fully rendered `ck_transactions_txn_type_valid` to `op.drop_constraint` produced `ck_transactions_ck_transactions_txn_type_valid`. The bare token is what you pass.
-- **`include_name` only filters the database reflection side**, not the model side. Keeping a SQLModel class for the signalling table *and* excluding it by name made autogenerate report it as a new table forever, generating a `create_table` that failed with "relation already exists" on every run. Managing it entirely outside the models was the clean answer.
-- **A replication slot and a publication are unrelated objects.** The slot holds the position and the WAL retention; the publication is just a catalog filter, passed as an argument at `START_REPLICATION` time. That is why dropping and recreating the publication on every startup doesn't disturb the slot — and why a surviving slot with a lost offset file causes silent data loss rather than an error.
-- **JSON escaping through the shell.** Posting a connector config with `-d "$(...)"` collapsed `\\.` to `\.` in a regex, and `\.` is not a legal JSON escape — Connect returned a 500 about an unrecognized character escape, which reads like a connector problem and isn't. Use `--data-binary @file` or a quoted heredoc.
-- **Kafka Connect silently ignores unknown config keys.** I spent a while on `tombstone.delete.enabled`, which exists in neither the Debezium nor the S3 sink `ConfigDef` — I was thinking of the JDBC sink's `delete.enabled`. The real keys are `tombstones.on.delete` on the source and `behavior.on.null.values` on the sink. Querying `/connector-plugins/<class>/config` is how to check rather than guess.
-- **`timestamp.extractor: RecordField` reads the record value**, so a tombstone — whose value is null by definition — is a guaranteed crash for the S3 sink, not an edge case.
-- **Compose interpolation is `${VAR}`, not `{$VAR}`.** The latter expands the variable and leaves the braces as literal text, which turned `"Port": {$DATABASE_PORT}` into `"Port": {5433}` and broke the JSON parse. Compose interpolates `configs` `content:` blocks the same as the rest of the file, which makes generating pgAdmin's `servers.json` and `.pgpass` from `.env` straightforward once the syntax is right.
-- **Installing PyFlink.** Its dependency chain still expects `pkg_resources`, which recent `setuptools` versions removed, so `setuptools` has to be pinned below 81 and installed with `--no-build-isolation`.
