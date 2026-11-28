@@ -11,3 +11,6 @@ minio.license
 dbt/target
 .dockerignore
 .DS_STORE
+.env.*
+!.env.example
+*.env.bak
