@@ -75,6 +75,7 @@ class AccountHoldersRelationship(StrEnum):
 class UserAccountActivity(StrEnum):
     LOGIN = "login"
     LOGOUT = "logout"
+    REGISTERED = "registered"
 
 class UserAccountActivityOutcome(StrEnum):
     SUCCESS = "success"

@@ -1,0 +1,1 @@
+{% for t in ['transactions','accounts','users','account_holders','ledger_entries','user_accountactivity'] %}select '{{ t }}' as src, count(*) as n_rows from {{ source('minio_raw', t) }}{% if not loop.last %} union all {% endif %}{% endfor %}

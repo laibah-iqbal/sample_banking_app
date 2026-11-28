@@ -11,7 +11,7 @@
 # this script needs no edits.
 set -u
 
-CONNECT_URL="http://connect:8083"
+CONNECT_URL="http://localhost:8083"
 
 wait_for_connect() {
   i=0

@@ -1,0 +1,1 @@
+select column_name, column_type from (describe select after, source from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true))

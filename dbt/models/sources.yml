@@ -1,0 +1,52 @@
+version: 2
+
+sources:
+  - name: minio_raw
+    tables:
+      # The sink writes Parquet (format.class=ParquetFormat), so every entry
+      # globs *.parquet. external_location is injected straight into the FROM
+      # clause; read_parquet() is spelled out rather than left as a bare path
+      # so the options are explicit:
+      #   hive_partitioning turns event_date=... into a real column to filter on
+      #   union_by_name     bronze schemas drift as columns are added or
+      #                     excluded over time, and schema.compatibility=NONE
+      #                     on the sink means files are written per-schema with
+      #                     no reconciliation; without this, files that
+      #                     disagree on columns fail the scan
+      #
+      # Note these columns are before/after/op/ts_ms at the TOP level, not
+      # under `payload`. CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=true wraps the
+      # Kafka message as {schema, payload}, but the sink's converter consumes
+      # the schema half and writes the payload's fields as Parquet columns.
+      # The `payload` wrapper in flink/utils.py exists because Flink reads the
+      # raw message bytes; bronze never sees it.
+      #
+      # NOTE: external_location is the ONLY key dbt-duckdb reads here.
+      # file_format and partitions are not dbt-duckdb options — dbt v2 rejects
+      # unknown config keys outright (UnusedConfigKey/dbt1060), so they fail
+      # the run rather than being ignored. Reader options belong inside the
+      # external_location call, as above; Parquet globs get hive partitioning
+      # auto-detected from the event_date=... path segment.
+      - name: transactions
+        config:
+          external_location: "read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)"
+
+      - name: accounts
+        config:
+          external_location: "read_parquet('s3://bronze/topics/transactions.public.accounts/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)"
+
+      - name: users
+        config:
+          external_location: "read_parquet('s3://bronze/topics/transactions.public.users/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)"
+
+      - name: account_holders
+        config:
+          external_location: "read_parquet('s3://bronze/topics/transactions.public.account_holders/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)"
+
+      - name: ledger_entries
+        config:
+          external_location: "read_parquet('s3://bronze/topics/transactions.public.ledger_entries/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)"
+
+      - name: user_accountactivity
+        config:
+          external_location: "read_parquet('s3://bronze/topics/transactions.public.user_accountactivity/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)"

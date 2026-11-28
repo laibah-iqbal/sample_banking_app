@@ -1,0 +1,1 @@
+select json_keys(to_json(any_value(after))) as cols from {{ source('minio_raw','users') }}

@@ -1,0 +1,1 @@
+select json_keys(to_json(any_value(after))) as cols from read_parquet('s3://bronze/topics/transactions.public.users/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)

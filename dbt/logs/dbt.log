@@ -1,0 +1,1880 @@
+==================== 2026-11-24T14:08:27.468146Z | 01a20de2-f53b-71f2-bbeb-235022919e2b ====================
+14:08:27.470414 [info ]: dbt 2.0.12
+14:08:27.473709 [info ]: Started loading project
+14:08:27.489338 [info ]: Loading profiles.yml
+14:08:27.504988 [info ]: Finished loading project [  0.03s]
+14:08:27.506661 [info ]: Started debugging
+14:08:27.507574 [info ]: Debugging profile: dev
+14:08:27.507587 [info ]: Debugging dbt version: 2.0.12
+14:08:27.507601 [info ]: Debugging platform: macos aarch64 (unix)
+14:08:27.507823 [info ]: Debugging adapter type: duckdb (remote)
+14:08:27.524039 [info ]: Debugging dependencies:
+  git: OK
+14:08:27.526959 [info ]: Debugging connection:
+  "path": "warehouse.duckdb",
+  "schema": "main",
+  "extensions": [
+    "httpfs",
+    "json",
+    "parquet"
+  ],
+  "settings": {
+    "s3_region": "us-east-1",
+    "s3_secret_access_key": "minioadminpassword",
+    "s3_endpoint": "localhost:9000",
+    "s3_use_ssl": false,
+    "s3_url_style": "path",
+    "s3_access_key_id": "minioadmin"
+  }
+14:08:27.540399 [debug]: DuckDB driver resolved: duckdb 1.5.4
+14:08:33.738753 [info ]: Debugging connection test: ERROR
+14:08:33.739871 [info ]: Finished debugging [  6.23s]
+14:08:33.742053 [error]: [AuthenticationFailed (dbt1011)]: dbt was unable to connect to the database configured for the `duckdb` adapter.
+The following error was returned:
+
+Failed to load `duckdb` driver from name, then failed to load it from the CDN.
+
+First error:
+NotFound: Driver not found: duckdb (sqlstate: [0, 0, 0, 0, 0], vendor_code: 0)
+Second error:
+IO: HTTP error: io: failed to lookup address information: nodename nor servname provided, or not known (sqlstate: [0, 0, 0, 0, 0], vendor_code: 0)
+
+Check your database credentials and try again. For more information, visit:
+https://docs.getdbt.com/docs/core/connect-data-platform/connection-profiles
+14:08:33.745816 [info ]: 
+==================== Execution Summary =====================
+Finished 'debug' with 1 error for target 'dev' [6.3s]
+==================== 2026-11-25T06:44:21.609717Z | 01a21172-bbe5-7100-825a-26bd3fe1172f ====================
+06:44:21.613778 [info ]: dbt 2.0.12
+06:44:21.615459 [info ]: Started cleaning
+06:44:21.617776 [info ]: Started loading project
+06:44:21.644208 [info ]: Loading profiles.yml
+06:44:21.651558 [info ]: Finished loading project [  0.03s]
+06:44:21.651808 [info ]: Finished cleaning [  0.04s]
+06:44:27.696994 [info ]: 
+==================== Execution Summary =====================
+Finished 'clean' successfully [6.1s]
+==================== 2026-11-25T08:11:56.590748Z | 01a211c2-eb0b-7ce0-a981-dea4dd257568 ====================
+08:11:56.597717 [info ]: dbt 2.0.12
+08:11:56.603627 [info ]: Started loading project
+08:11:56.645011 [info ]: Loading profiles.yml
+08:11:56.656522 [info ]: Finished loading project [  0.05s]
+08:11:56.663562 [error]: [InvalidConfig (dbt1005)]: Jinja render error: invalid operation: 'env_var': environment variable 'MINIO_ROOT_USER' not found
+(in :1:1)
+08:12:02.781989 [info ]: 
+==================== Execution Summary =====================
+Finished 'debug' with 1 error [6.2s]
+==================== 2026-11-25T08:16:40.210419Z | 01a211c7-3f02-7e20-aaf9-fade3bb477e2 ====================
+08:16:40.882153 [info ]: 
+==================== Execution Summary =====================
+Finished 'internal' successfully [671ms]
+==================== 2026-11-25T08:16:48.158989Z | 01a211c7-5e1e-70a2-8cdb-35a8b9718345 ====================
+08:16:48.159452 [info ]: dbt 2.0.12
+08:16:48.162603 [info ]: Started loading project
+08:16:48.181138 [info ]: Loading profiles.yml
+08:16:48.188520 [info ]: Finished loading project [  0.03s]
+08:16:48.190352 [error]: [InvalidConfig (dbt1005)]: Jinja render error: invalid operation: 'env_var': environment variable 'MINIO_ROOT_USER' not found
+(in :1:1)
+08:16:48.621910 [info ]: 
+==================== Execution Summary =====================
+Finished 'debug' with 1 error [462ms]
+==================== 2026-11-25T08:18:24.894161Z | 01a211c8-d7f0-7ee0-8f3b-d912e8f4dcc3 ====================
+08:18:24.897733 [info ]: dbt 2.0.12
+08:18:24.900362 [info ]: Started loading project
+08:18:24.919858 [info ]: Loading profiles.yml
+08:18:24.934897 [info ]: Finished loading project [  0.03s]
+08:18:24.937011 [info ]: Started debugging
+08:18:24.937364 [info ]: Debugging profile: dev
+08:18:24.937377 [info ]: Debugging dbt version: 2.0.12
+08:18:24.937486 [info ]: Debugging platform: macos aarch64 (unix)
+08:18:24.937889 [info ]: Debugging adapter type: duckdb (remote)
+08:18:24.942239 [info ]: Debugging dependencies:
+  git: OK
+08:18:24.944997 [info ]: Debugging connection:
+  "path": "warehouse.duckdb",
+  "schema": "main",
+  "extensions": [
+    "httpfs",
+    "json",
+    "parquet"
+  ],
+  "settings": {
+    "s3_access_key_id": "minioadmin",
+    "s3_url_style": "path",
+    "s3_secret_access_key": "minioadminpassword",
+    "s3_endpoint": "localhost:9000",
+    "s3_region": "us-east-1",
+    "s3_use_ssl": false
+  }
+08:18:24.951661 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:18:30.359571 [debug]: borrow_tlocal_connection() took 5.41074925s
+08:18:30.365920 [debug]: create_debug_span(...).entered() took 1.164875ms
+08:18:30.367596 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 906µs
+08:18:30.367602 [debug]: reader.schema() took 209ns
+08:18:30.368532 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 2.602125ms
+08:18:30.370953 [debug]: concat_batches + normalize_result_column_names took 2.414291ms
+08:18:30.371557 [debug]: record_current_span_status_from_attrs took 596.458µs
+08:18:30.371878 [debug]: Query executed on node unknown:
+select 1 as id
+08:18:30.372071 [debug]: drop(query_span_guard) (span exit/export) took 509.333µs
+08:18:30.377363 [debug]: adapter.execute() (full call, incl. adbc_execute_with_options) took 17.770667ms
+08:18:30.378231 [info ]: Debugging connection test: OK (5.4s)
+08:18:30.380392 [info ]: Debugged All checks passed!
+08:18:30.381240 [info ]: Finished debugging [  5.44s]
+08:18:30.385251 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:18:30.533154 [info ]: 
+==================== Execution Summary =====================
+Finished 'debug' successfully for target 'dev' [5.6s]
+==================== 2026-11-25T08:18:56.142438Z | 01a211c9-51f9-75c3-af10-ce1969395f98 ====================
+08:18:56.145186 [info ]: dbt 2.0.12
+08:18:56.147469 [info ]: Started loading project
+08:18:56.159447 [info ]: Loading profiles.yml
+08:18:56.307266 [debug]:    Started loading packages
+08:18:56.316029 [debug]:     Loaded [  0.01s] packages
+08:18:56.321266 [info ]: Finished loading project [  0.17s]
+08:18:56.324960 [info ]: Started parsing (2 nodes)
+08:18:56.356207 [debug]:    Started building model nodes
+08:18:56.356213 [debug]:    Started building model nodes
+08:18:56.356332 [debug]:   Finished [  0.00s] building model nodes
+08:18:56.356332 [debug]:   Finished [  0.00s] building model nodes
+08:18:56.356380 [debug]: Finished parsing models/sources.yml [  0.01s]
+08:18:56.357722 [debug]:    Started resolving data tests
+08:18:56.357723 [debug]:    Started resolving data tests
+08:18:56.358076 [debug]:   Finished [  0.00s] resolving data tests
+08:18:56.358077 [debug]:   Finished [  0.00s] resolving data tests
+08:18:56.359585 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"file_format"`. YAML path: `config.file_format`.
+  --> models/sources.yml:41:11
+08:18:56.359870 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"partitions"`. YAML path: `config.partitions`.
+  --> models/sources.yml:42:11
+08:18:56.362127 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"file_format"`. YAML path: `config.file_format`.
+  --> models/sources.yml:25:11
+08:18:56.362169 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"partitions"`. YAML path: `config.partitions`.
+  --> models/sources.yml:26:11
+08:18:56.362239 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"file_format"`. YAML path: `config.file_format`.
+  --> models/sources.yml:49:11
+08:18:56.362271 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"partitions"`. YAML path: `config.partitions`.
+  --> models/sources.yml:50:11
+08:18:56.362340 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"file_format"`. YAML path: `config.file_format`.
+  --> models/sources.yml:57:11
+08:18:56.362371 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"partitions"`. YAML path: `config.partitions`.
+  --> models/sources.yml:58:11
+08:18:56.362421 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"file_format"`. YAML path: `config.file_format`.
+  --> models/sources.yml:33:11
+08:18:56.362451 [error]: [UnusedConfigKey (dbt1060)]: Ignored unexpected key `"partitions"`. YAML path: `config.partitions`.
+  --> models/sources.yml:34:11
+08:18:56.369861 [debug]: Finished parsing models/stg_transactions.sql [  0.01s]
+08:18:56.369877 [debug]:    Started building model nodes
+08:18:56.372546 [debug]:   Finished [  0.00s] building model nodes
+08:18:56.372767 [debug]:    Started resolving data tests
+08:18:56.372778 [debug]:   Finished [  0.00s] resolving data tests
+08:18:56.374329 [debug]:    Started typechecking macros
+08:18:56.433723 [debug]:   Finished [  0.06s] typechecking macros
+08:18:56.436559 [info ]: Finished parsing [  0.11s] (2 nodes, 0 skipped, 0 errors)
+08:18:57.168573 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:18:57.308924 [info ]: suggestion: Run 'dbt deps' to see the latest dbt v2 compatible packages. For compatibility errors, try the autofix script: https://github.com/dbt-labs/dbt-autofix. Upgrading to dbt v2 requires updates to your project -- work with your team and follow our upgrade guide: https://docs.getdbt.com/docs/dbt-versions/dbt-upgrade/upgrading-to-v2
+08:18:57.308924 [info ]: 
+==================== Execution Summary =====================
+Finished 'run' with 10 errors for target 'dev' [1.2s]
+==================== 2026-11-25T08:20:15.503626Z | 01a211ca-87f7-7143-9103-0522731d349d ====================
+08:20:15.507009 [info ]: dbt 2.0.12
+08:20:15.509868 [info ]: Started loading project
+08:20:15.521426 [info ]: Loading profiles.yml
+08:20:15.687313 [debug]:    Started loading packages
+08:20:15.697852 [debug]:     Loaded [  0.01s] packages
+08:20:15.703235 [info ]: Finished loading project [  0.19s]
+08:20:15.706056 [info ]: Started parsing (2 nodes)
+08:20:15.751165 [debug]:    Started building model nodes
+08:20:15.751174 [debug]:    Started building model nodes
+08:20:15.751187 [debug]:   Finished [  0.00s] building model nodes
+08:20:15.751187 [debug]:   Finished [  0.00s] building model nodes
+08:20:15.752132 [debug]: Finished parsing models/sources.yml [  0.01s]
+08:20:15.752382 [debug]:    Started resolving data tests
+08:20:15.752386 [debug]:    Started resolving data tests
+08:20:15.752564 [debug]:   Finished [  0.00s] resolving data tests
+08:20:15.752563 [debug]:   Finished [  0.00s] resolving data tests
+08:20:15.764248 [debug]: Finished parsing models/stg_transactions.sql [  0.01s]
+08:20:15.764266 [debug]:    Started building model nodes
+08:20:15.766908 [debug]:   Finished [  0.00s] building model nodes
+08:20:15.767119 [debug]:    Started resolving data tests
+08:20:15.767130 [debug]:   Finished [  0.00s] resolving data tests
+08:20:15.769003 [debug]:    Started typechecking macros
+08:20:15.831590 [debug]:   Finished [  0.06s] typechecking macros
+08:20:15.835349 [info ]: Finished parsing [  0.13s] (2 nodes, 0 skipped, 0 errors)
+08:20:15.865607 [info ]: Started scheduling
+08:20:15.867365 [info ]: Finished scheduling [  0.00s]
+08:20:15.870301 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+08:20:15.882388 [info ]: Started building task graph
+08:20:15.885607 [info ]: Finished building task graph [  0.00s]
+08:20:15.920216 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:20:16.020086 [debug]: create_debug_span(...).entered() took 395µs
+08:20:16.023248 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 996.25µs
+08:20:16.023258 [debug]: reader.schema() took 167ns
+08:20:16.023267 [debug]: batch-consume loop (for res in reader) took 6.333µs
+08:20:16.023274 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 3.1775ms
+08:20:16.024023 [debug]: concat_batches + normalize_result_column_names took 745.167µs
+08:20:16.024170 [debug]: record_current_span_status_from_attrs took 140.167µs
+08:20:16.024277 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    select schema_name
+    from system.information_schema.schemata
+    
+    where lower(catalog_name) = '"warehouse"'
+    
+  
+  
+08:20:16.024290 [debug]: drop(query_span_guard) (span exit/export) took 116.208µs
+08:20:16.027050 [debug]: create_debug_span(...).entered() took 3µs
+08:20:16.027541 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 387.292µs
+08:20:16.027555 [debug]: reader.schema() took 83ns
+08:20:16.027708 [debug]: batch-consume loop (for res in reader) took 148.083µs
+08:20:16.027718 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 659.25µs
+08:20:16.027722 [debug]: concat_batches + normalize_result_column_names took 1.958µs
+08:20:16.027725 [debug]: record_current_span_status_from_attrs took 750ns
+08:20:16.027728 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+        select type from duckdb_databases()
+        where lower(database_name)='warehouse'
+        and type='sqlite'
+    
+  
+08:20:16.027733 [debug]: drop(query_span_guard) (span exit/export) took 6.167µs
+08:20:16.028148 [debug]: create_debug_span(...).entered() took 3.417µs
+08:20:16.028800 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 143µs
+08:20:16.028804 [debug]: reader.schema() took 41ns
+08:20:16.028819 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 664.5µs
+08:20:16.028824 [debug]: concat_batches + normalize_result_column_names took 1.625µs
+08:20:16.028827 [debug]: record_current_span_status_from_attrs took 708ns
+08:20:16.028829 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    
+        create schema if not exists "warehouse"."main"
+    
+08:20:16.028836 [debug]: drop(query_span_guard) (span exit/export) took 6.792µs
+08:20:16.030443 [info ]: Started rendering (1 nodes)
+08:20:16.030598 [info ]: Started model main.stg_transactions
+08:20:16.030719 [debug]: Started rendering model main.stg_transactions
+08:20:16.034833 [debug]: Compiled SQL for node model.banking_app.stg_transactions at target/compiled/banking_app/models/stg_transactions.sql
+08:20:16.035385 [debug]: Finished rendering [  0.00s] model main.stg_transactions [success]
+08:20:16.035394 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+08:20:16.036432 [info ]: Started analyzing (1 nodes)
+08:20:16.036557 [debug]: Started analyzing model main.stg_transactions
+08:20:16.054871 [debug]: Finished analyzing [  0.02s] model main.stg_transactions [success]
+08:20:16.054884 [info ]: Finished analyzing [  0.02s] (1 nodes, 0 skipped, 0 errors)
+08:20:16.054896 [info ]: Started running (1 nodes)
+08:20:16.054900 [info ]: Started running model main.stg_transactions
+08:20:16.065294 [debug]: create_debug_span(...).entered() took 6.417µs
+08:20:16.067653 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.123458ms
+08:20:16.067659 [debug]: reader.schema() took 167ns
+08:20:16.067670 [debug]: batch-consume loop (for res in reader) took 8.541µs
+08:20:16.067692 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 2.389375ms
+08:20:16.067700 [debug]: concat_batches + normalize_result_column_names took 4.583µs
+08:20:16.067703 [debug]: record_current_span_status_from_attrs took 750ns
+08:20:16.067707 [debug]: Query executed on node model.banking_app.stg_transactions:
+SELECT table_catalog, table_schema, table_name, table_type FROM information_schema.tables WHERE table_schema = 'main' AND lower(table_catalog) = lower('warehouse')
+08:20:16.067714 [debug]: drop(query_span_guard) (span exit/export) took 8.5µs
+08:20:16.069339 [debug]: Writing runtime sql for node "model.banking_app.stg_transactions"
+08:20:16.069877 [debug]: create_debug_span(...).entered() took 3.209µs
+08:20:17.538182 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+  
+  create view "warehouse"."main"."stg_transactions__dbt_tmp" as (
+    -- Smoke test, not a real staging model: the only question it answers is
+-- whether dbt/DuckDB can reach MinIO and parse a bronze object at all.
+--
+-- select * on purpose. The Debezium envelope comes back as nested structs
+-- (op, before, after, source, ts_ms/ts_us/ts_ns, transaction) plus event_date
+-- from the Hive partition, so this is also the quickest way to see the shape
+-- the real silver models will have to unnest.
+select *
+from read_json('s3://bronze/topics/transactions.public.transactions/event_date=*/*.json', format='newline_delimited', hive_partitioning=true, union_by_name=true)
+limit 10
+  );
+
+08:20:18.542599 [error]: [DbDriverFailed (dbt1308)]: Database Error in model stg_transactions (target/run/banking_app/models/stg_transactions.sql)
+  HTTP Error: HTTP GET error reading 's3://bronze/topics/transactions.public.transactions/event_date=' in region 'us-east-1' (HTTP 403 Forbidden)
+  
+  AccessDenied: Access Denied
+  
+  Authentication Failure - this is usually caused by invalid or missing credentials.
+  * No credentials are provided.
+  * See https://duckdb.org/docs/stable/extensions/httpfs/s3api.html
+  
+  LINE 13: from read_json('s3://bronze/topics/transactions.public.transactions...
+                ^
+  (in run/banking_app/models/stg_transactions.sql)
+08:20:18.543173 [info ]: Finished running [  2.49s] model main.stg_transactions [error]
+08:20:18.543198 [info ]: Finished running [  2.49s] (1 nodes, 0 skipped, 1 errors)
+08:20:18.543209 [info ]:     Failed model main.stg_transactions (view) [1 of 1 in 2.51s]
+08:20:18.596463 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:20:18.735488 [info ]: 
+==================== Execution Summary =====================
+Finished 'run' with 1 error for target 'dev' [3.2s]
+Processed: 1 model
+Summary: 1 total | 1 error
+==================== 2026-11-25T08:22:24.181769Z | 01a211cc-7ea0-7583-9799-e6f04212a770 ====================
+08:22:24.183914 [info ]: dbt 2.0.12
+08:22:24.186864 [info ]: Started loading project
+08:22:24.199083 [info ]: Loading profiles.yml
+08:22:24.356596 [debug]:    Started loading packages
+08:22:24.367152 [debug]:     Loaded [  0.01s] packages
+08:22:24.373623 [info ]: Finished loading project [  0.19s]
+08:22:24.377534 [info ]: Started parsing (2 nodes)
+08:22:24.406679 [debug]:    Started building model nodes
+08:22:24.406686 [debug]:    Started building model nodes
+08:22:24.406793 [debug]:   Finished [  0.00s] building model nodes
+08:22:24.406793 [debug]:   Finished [  0.00s] building model nodes
+08:22:24.407112 [debug]: Finished parsing models/sources.yml [  0.00s]
+08:22:24.407820 [debug]:    Started resolving data tests
+08:22:24.407820 [debug]:    Started resolving data tests
+08:22:24.407858 [debug]:   Finished [  0.00s] resolving data tests
+08:22:24.407858 [debug]:   Finished [  0.00s] resolving data tests
+08:22:24.418088 [debug]: Finished parsing models/stg_transactions.sql [  0.01s]
+08:22:24.418104 [debug]:    Started building model nodes
+08:22:24.420243 [debug]:   Finished [  0.00s] building model nodes
+08:22:24.420460 [debug]:    Started resolving data tests
+08:22:24.420472 [debug]:   Finished [  0.00s] resolving data tests
+08:22:24.421435 [debug]:    Started typechecking macros
+08:22:24.478673 [debug]:   Finished [  0.06s] typechecking macros
+08:22:24.481869 [info ]: Finished parsing [  0.10s] (2 nodes, 0 skipped, 0 errors)
+08:22:24.519141 [info ]: Started scheduling
+08:22:24.520801 [info ]: Finished scheduling [  0.00s]
+08:22:24.523645 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+08:22:24.533824 [info ]: Started building task graph
+08:22:24.537844 [info ]: Finished building task graph [  0.00s]
+08:22:24.565151 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:22:24.668413 [debug]: create_debug_span(...).entered() took 331.583µs
+08:22:24.673420 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.509958ms
+08:22:24.673430 [debug]: reader.schema() took 42ns
+08:22:24.673443 [debug]: batch-consume loop (for res in reader) took 10µs
+08:22:24.673451 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 5.02775ms
+08:22:24.673823 [debug]: concat_batches + normalize_result_column_names took 368.667µs
+08:22:24.673948 [debug]: record_current_span_status_from_attrs took 120.083µs
+08:22:24.674059 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    select schema_name
+    from system.information_schema.schemata
+    
+    where lower(catalog_name) = '"warehouse"'
+    
+  
+  
+08:22:24.674069 [debug]: drop(query_span_guard) (span exit/export) took 116.666µs
+08:22:24.677391 [debug]: create_debug_span(...).entered() took 3.875µs
+08:22:24.677802 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 288.75µs
+08:22:24.677806 [debug]: reader.schema() took 41ns
+08:22:24.677912 [debug]: batch-consume loop (for res in reader) took 103.667µs
+08:22:24.677919 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 520.083µs
+08:22:24.677924 [debug]: concat_batches + normalize_result_column_names took 2.292µs
+08:22:24.677927 [debug]: record_current_span_status_from_attrs took 583ns
+08:22:24.677930 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+        select type from duckdb_databases()
+        where lower(database_name)='warehouse'
+        and type='sqlite'
+    
+  
+08:22:24.677936 [debug]: drop(query_span_guard) (span exit/export) took 6.042µs
+08:22:24.678675 [debug]: create_debug_span(...).entered() took 2.083µs
+08:22:24.679051 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 144.416µs
+08:22:24.679054 [debug]: reader.schema() took 41ns
+08:22:24.679300 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 619.875µs
+08:22:24.679304 [debug]: concat_batches + normalize_result_column_names took 959ns
+08:22:24.679306 [debug]: record_current_span_status_from_attrs took 375ns
+08:22:24.679308 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    
+        create schema if not exists "warehouse"."main"
+    
+08:22:24.679312 [debug]: drop(query_span_guard) (span exit/export) took 3.917µs
+08:22:24.681279 [info ]: Started rendering (1 nodes)
+08:22:24.681832 [info ]: Started model main.stg_transactions
+08:22:24.682119 [debug]: Started rendering model main.stg_transactions
+08:22:24.687035 [debug]: Compiled SQL for node model.banking_app.stg_transactions at target/compiled/banking_app/models/stg_transactions.sql
+08:22:24.687318 [debug]: Finished rendering [  0.01s] model main.stg_transactions [success]
+08:22:24.687326 [info ]: Finished rendering [  0.01s] (1 nodes, 0 skipped, 0 errors)
+08:22:24.688250 [info ]: Started analyzing (1 nodes)
+08:22:24.688540 [debug]: Started analyzing model main.stg_transactions
+08:22:24.707757 [debug]: Finished analyzing [  0.02s] model main.stg_transactions [success]
+08:22:24.707767 [info ]: Finished analyzing [  0.02s] (1 nodes, 0 skipped, 0 errors)
+08:22:24.707775 [info ]: Started running (1 nodes)
+08:22:24.707780 [info ]: Started running model main.stg_transactions
+08:22:24.723022 [debug]: create_debug_span(...).entered() took 7.542µs
+08:22:24.724971 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 944.416µs
+08:22:24.724978 [debug]: reader.schema() took 41ns
+08:22:24.724988 [debug]: batch-consume loop (for res in reader) took 7.833µs
+08:22:24.725101 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 2.067042ms
+08:22:24.725109 [debug]: concat_batches + normalize_result_column_names took 4µs
+08:22:24.725112 [debug]: record_current_span_status_from_attrs took 833ns
+08:22:24.725116 [debug]: Query executed on node model.banking_app.stg_transactions:
+SELECT table_catalog, table_schema, table_name, table_type FROM information_schema.tables WHERE table_schema = 'main' AND lower(table_catalog) = lower('warehouse')
+08:22:24.725124 [debug]: drop(query_span_guard) (span exit/export) took 9.208µs
+08:22:24.726181 [debug]: Writing runtime sql for node "model.banking_app.stg_transactions"
+08:22:24.726604 [debug]: create_debug_span(...).entered() took 3.958µs
+08:22:24.748755 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+  
+  create view "warehouse"."main"."stg_transactions__dbt_tmp" as (
+    -- Smoke test, not a real staging model: the only question it answers is
+-- whether dbt/DuckDB can reach MinIO and parse a bronze object at all.
+--
+-- select * on purpose. The Debezium envelope comes back as nested structs
+-- (op, before, after, source, ts_ms/ts_us/ts_ns, transaction) plus event_date
+-- from the Hive partition, so this is also the quickest way to see the shape
+-- the real silver models will have to unnest.
+select *
+from read_json('s3://bronze/topics/transactions.public.transactions/event_date=*/*.json', format='newline_delimited', hive_partitioning=true, union_by_name=true)
+limit 10
+  );
+
+08:22:25.756966 [error]: [DbDriverFailed (dbt1308)]: Database Error in model stg_transactions (target/run/banking_app/models/stg_transactions.sql)
+  IO Error: No files found that match the pattern "s3://bronze/topics/transactions.public.transactions/event_date=*/*.json"
+  
+  LINE 13: from read_json('s3://bronze/topics/transactions.public.transactions...
+                ^
+  (in run/banking_app/models/stg_transactions.sql)
+08:22:25.757432 [info ]: Finished running [  1.05s] model main.stg_transactions [error]
+08:22:25.757451 [info ]: Finished running [  1.05s] (1 nodes, 0 skipped, 1 errors)
+08:22:25.757460 [info ]:     Failed model main.stg_transactions (view) [1 of 1 in 1.07s]
+08:22:25.809425 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:22:25.951047 [info ]: 
+==================== Execution Summary =====================
+Finished 'run' with 1 error for target 'dev' [1.8s]
+Processed: 1 model
+Summary: 1 total | 1 error
+==================== 2026-11-25T08:40:39.382964Z | 01a211dd-34c9-7802-9288-85824bb39f4a ====================
+08:40:39.383146 [info ]: dbt 2.0.12
+08:40:39.385154 [info ]: Started loading project
+08:40:39.389947 [info ]: Loading profiles.yml
+08:40:39.531402 [debug]:    Started loading packages
+08:40:39.544089 [debug]:     Loaded [  0.01s] packages
+08:40:39.550018 [info ]: Finished loading project [  0.16s]
+08:40:39.553258 [info ]: Started parsing (2 nodes)
+08:40:39.586417 [debug]:    Started building model nodes
+08:40:39.586422 [debug]:    Started building model nodes
+08:40:39.586535 [debug]:   Finished [  0.00s] building model nodes
+08:40:39.586535 [debug]:   Finished [  0.00s] building model nodes
+08:40:39.586910 [debug]: Finished parsing models/sources.yml [  0.01s]
+08:40:39.588119 [debug]:    Started resolving data tests
+08:40:39.588123 [debug]:    Started resolving data tests
+08:40:39.588377 [debug]:   Finished [  0.00s] resolving data tests
+08:40:39.588378 [debug]:   Finished [  0.00s] resolving data tests
+08:40:39.598980 [debug]: Finished parsing models/stg_transactions.sql [  0.01s]
+08:40:39.598996 [debug]:    Started building model nodes
+08:40:39.602949 [debug]:   Finished [  0.00s] building model nodes
+08:40:39.603170 [debug]:    Started resolving data tests
+08:40:39.603180 [debug]:   Finished [  0.00s] resolving data tests
+08:40:39.604753 [debug]:    Started typechecking macros
+08:40:39.663119 [debug]:   Finished [  0.06s] typechecking macros
+08:40:39.666663 [info ]: Finished parsing [  0.11s] (2 nodes, 0 skipped, 0 errors)
+08:40:39.700385 [info ]: Started scheduling
+08:40:39.701891 [info ]: Finished scheduling [  0.00s]
+08:40:39.704431 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+08:40:39.714198 [info ]: Started building task graph
+08:40:39.717721 [info ]: Finished building task graph [  0.00s]
+08:40:39.744825 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:40:39.869871 [debug]: create_debug_span(...).entered() took 256.583µs
+08:40:39.874172 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.404542ms
+08:40:39.874184 [debug]: reader.schema() took 125ns
+08:40:39.874193 [debug]: batch-consume loop (for res in reader) took 6.542µs
+08:40:39.874200 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 4.319375ms
+08:40:39.874442 [debug]: concat_batches + normalize_result_column_names took 239.541µs
+08:40:39.874556 [debug]: record_current_span_status_from_attrs took 109.792µs
+08:40:39.874662 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    select schema_name
+    from system.information_schema.schemata
+    
+    where lower(catalog_name) = '"warehouse"'
+    
+  
+  
+08:40:39.874672 [debug]: drop(query_span_guard) (span exit/export) took 113.125µs
+08:40:39.878046 [debug]: create_debug_span(...).entered() took 2.375µs
+08:40:39.878422 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 286.75µs
+08:40:39.878425 [debug]: reader.schema() took 42ns
+08:40:39.878441 [debug]: batch-consume loop (for res in reader) took 13.792µs
+08:40:39.878446 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 395.041µs
+08:40:39.878450 [debug]: concat_batches + normalize_result_column_names took 1.042µs
+08:40:39.878452 [debug]: record_current_span_status_from_attrs took 250ns
+08:40:39.878455 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+        select type from duckdb_databases()
+        where lower(database_name)='warehouse'
+        and type='sqlite'
+    
+  
+08:40:39.878459 [debug]: drop(query_span_guard) (span exit/export) took 4.583µs
+08:40:39.879095 [debug]: create_debug_span(...).entered() took 1.375µs
+08:40:39.879501 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 229.25µs
+08:40:39.879505 [debug]: reader.schema() took 0ns
+08:40:39.879616 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 516.667µs
+08:40:39.879619 [debug]: concat_batches + normalize_result_column_names took 875ns
+08:40:39.879621 [debug]: record_current_span_status_from_attrs took 167ns
+08:40:39.879624 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    
+        create schema if not exists "warehouse"."main"
+    
+08:40:39.879627 [debug]: drop(query_span_guard) (span exit/export) took 3.875µs
+08:40:39.881609 [info ]: Started rendering (1 nodes)
+08:40:39.882139 [info ]: Started model main.stg_transactions
+08:40:39.882148 [debug]: Started rendering model main.stg_transactions
+08:40:39.886452 [debug]: Compiled SQL for node model.banking_app.stg_transactions at target/compiled/banking_app/models/stg_transactions.sql
+08:40:39.886938 [debug]: Finished rendering [  0.00s] model main.stg_transactions [success]
+08:40:39.886946 [info ]: Finished rendering [  0.01s] (1 nodes, 0 skipped, 0 errors)
+08:40:39.887662 [info ]: Started analyzing (1 nodes)
+08:40:39.887952 [debug]: Started analyzing model main.stg_transactions
+08:40:39.906146 [debug]: Finished analyzing [  0.02s] model main.stg_transactions [success]
+08:40:39.906155 [info ]: Finished analyzing [  0.02s] (1 nodes, 0 skipped, 0 errors)
+08:40:39.906166 [info ]: Started running (1 nodes)
+08:40:39.906170 [info ]: Started running model main.stg_transactions
+08:40:39.918254 [debug]: create_debug_span(...).entered() took 4.583µs
+08:40:39.920272 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 941.292µs
+08:40:39.920280 [debug]: reader.schema() took 125ns
+08:40:39.920292 [debug]: batch-consume loop (for res in reader) took 8.584µs
+08:40:39.920412 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 2.148375ms
+08:40:39.920420 [debug]: concat_batches + normalize_result_column_names took 4.167µs
+08:40:39.920424 [debug]: record_current_span_status_from_attrs took 834ns
+08:40:39.920427 [debug]: Query executed on node model.banking_app.stg_transactions:
+SELECT table_catalog, table_schema, table_name, table_type FROM information_schema.tables WHERE table_schema = 'main' AND lower(table_catalog) = lower('warehouse')
+08:40:39.920435 [debug]: drop(query_span_guard) (span exit/export) took 9.125µs
+08:40:39.922029 [debug]: Writing runtime sql for node "model.banking_app.stg_transactions"
+08:40:39.922433 [debug]: create_debug_span(...).entered() took 2.791µs
+08:40:39.945284 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.039333ms
+08:40:39.945296 [debug]: reader.schema() took 42ns
+08:40:39.945304 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 22.866542ms
+08:40:39.945309 [debug]: concat_batches + normalize_result_column_names took 3µs
+08:40:39.945314 [debug]: record_current_span_status_from_attrs took 1.417µs
+08:40:39.945318 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+  
+  create view "warehouse"."main"."stg_transactions__dbt_tmp" as (
+    -- Smoke test, not a real staging model: the only question it answers is
+-- whether dbt/DuckDB can reach MinIO and parse a bronze object at all.
+--
+-- select * on purpose. The Debezium envelope comes back as nested structs
+-- (op, before, after, source, ts_ms/ts_us/ts_ns, transaction) plus event_date
+-- from the Hive partition, so this is also the quickest way to see the shape
+-- the real silver models will have to unnest.
+select *
+from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)
+limit 10
+  );
+
+08:40:39.945327 [debug]: drop(query_span_guard) (span exit/export) took 10.333µs
+08:40:39.946566 [debug]: create_debug_span(...).entered() took 4.917µs
+08:40:39.946890 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 92.125µs
+08:40:39.946894 [debug]: reader.schema() took 41ns
+08:40:39.946898 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 326.125µs
+08:40:39.946902 [debug]: concat_batches + normalize_result_column_names took 1.333µs
+08:40:39.946905 [debug]: record_current_span_status_from_attrs took 542ns
+08:40:39.946908 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+alter view "warehouse"."main"."stg_transactions__dbt_tmp" rename to "stg_transactions"
+08:40:39.946912 [debug]: drop(query_span_guard) (span exit/export) took 4.917µs
+08:40:39.947706 [debug]: create_debug_span(...).entered() took 4.375µs
+08:40:39.947790 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 27.833µs
+08:40:39.947794 [debug]: reader.schema() took 42ns
+08:40:39.947799 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 86.75µs
+08:40:39.947803 [debug]: concat_batches + normalize_result_column_names took 1.25µs
+08:40:39.947805 [debug]: record_current_span_status_from_attrs took 458ns
+08:40:39.947808 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+      drop view if exists "warehouse"."main"."stg_transactions__dbt_backup" cascade
+    
+08:40:39.947814 [debug]: drop(query_span_guard) (span exit/export) took 6µs
+08:40:39.948706 [info ]: Finished running [  0.04s] model main.stg_transactions [success]
+08:40:39.948712 [info ]: Finished running [  0.04s] (1 nodes, 0 skipped, 0 errors)
+08:40:39.948716 [info ]:  Succeeded model main.stg_transactions (view) [1 of 1 in 0.06s]
+08:40:43.641059 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:40:43.777627 [info ]: 
+==================== Execution Summary =====================
+Finished 'run' successfully for target 'dev' [4.4s]
+Processed: 1 model
+Summary: 1 total | 1 success
+==================== 2026-11-25T08:40:58.908393Z | 01a211dd-811b-7051-b60f-9348c2092694 ====================
+08:40:58.908470 [info ]: dbt 2.0.12
+08:40:58.909211 [info ]: Started loading project
+08:40:58.909602 [info ]: Loading profiles.yml
+08:40:59.006973 [debug]:    Started loading packages
+08:40:59.007424 [debug]:     Loaded [  0.00s] packages
+08:40:59.008005 [info ]: Finished loading project [  0.10s]
+08:40:59.008309 [info ]: Started parsing (3 nodes)
+08:40:59.027695 [debug]:    Started building model nodes
+08:40:59.027708 [debug]:    Started building model nodes
+08:40:59.027749 [debug]:   Finished [  0.00s] building model nodes
+08:40:59.027771 [debug]:   Finished [  0.00s] building model nodes
+08:40:59.029935 [debug]: Finished parsing models/sources.yml [  0.00s]
+08:40:59.030204 [debug]:    Started resolving data tests
+08:40:59.030502 [debug]:   Finished [  0.00s] resolving data tests
+08:40:59.031758 [debug]:    Started resolving data tests
+08:40:59.032794 [debug]:   Finished [  0.00s] resolving data tests
+08:40:59.034779 [debug]: Finished parsing target/inline_e0ca6ee1.sql [  0.01s]
+08:40:59.034834 [debug]:    Started building model nodes
+08:40:59.038664 [debug]:   Finished [  0.00s] building model nodes
+08:40:59.038790 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+08:40:59.038818 [debug]:    Started building model nodes
+08:40:59.039849 [debug]:    Started resolving data tests
+08:40:59.040014 [debug]:   Finished [  0.00s] resolving data tests
+08:40:59.040130 [debug]:   Finished [  0.00s] building model nodes
+08:40:59.040746 [debug]:    Started resolving data tests
+08:40:59.040777 [debug]:   Finished [  0.00s] resolving data tests
+08:40:59.041236 [debug]:    Started typechecking macros
+08:40:59.112024 [debug]:   Finished [  0.07s] typechecking macros
+08:40:59.112488 [info ]: Finished parsing [  0.10s] (3 nodes, 0 skipped, 0 errors)
+08:40:59.112755 [info ]: Started scheduling
+08:40:59.113763 [info ]: Finished scheduling [  0.00s]
+08:40:59.113941 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+08:40:59.114610 [info ]: Started building task graph
+08:40:59.115286 [info ]: Finished building task graph [  0.00s]
+08:40:59.116292 [info ]: Started rendering (1 nodes)
+08:40:59.116305 [info ]: Started model main.inline
+08:40:59.116312 [debug]: Started rendering model main.inline
+08:40:59.116793 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_e0ca6ee1.sql
+08:40:59.116845 [debug]: Finished rendering [  0.00s] model main.inline [success]
+08:40:59.116851 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+08:40:59.116866 [info ]: Started analyzing (1 nodes)
+08:40:59.116871 [debug]: Started analyzing model main.inline
+08:40:59.121502 [debug]: Finished analyzing [  0.00s] model main.inline [success]
+08:40:59.121510 [info ]: Finished analyzing [  0.00s] (1 nodes, 0 skipped, 0 errors)
+08:40:59.121516 [info ]: Started running (1 nodes)
+08:40:59.121520 [info ]: Started running model main.inline
+08:40:59.122464 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:40:59.279118 [debug]: Query executed on node unknown:
+
+  
+  select op, event_date, after.id, after.txn_type, after.status, after.amount, after.currency from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) order by after.created_at
+  
+  limit 10
+
+08:40:59.281204 [info ]: Query show_sql_operation_inline
+┌────┬────────────┬──────────────────────────────────────┬──────────┬───────────┬────────┬──────────┐
+│ op ┆ event_date ┆ id                                   ┆ txn_type ┆ status    ┆ amount ┆ currency │
+╞════╪════════════╪══════════════════════════════════════╪══════════╪═══════════╪════════╪══════════╡
+│ r  ┆ 2026-11-25 ┆ 01a20dde-c993-7432-8e50-43d6be6f66ef ┆ deposit  ┆ completed ┆ 500.00 ┆ USD      │
+│ r  ┆ 2026-11-25 ┆ 01a20de2-3f76-7647-bc00-43c4ca94cfdb ┆ transfer ┆ completed ┆ 150.00 ┆ USD      │
+└────┴────────────┴──────────────────────────────────────┴──────────┴───────────┴────────┴──────────┘
+2 rows.
+08:40:59.281389 [info ]: Finished running [  0.16s] model main.inline [success]
+08:40:59.281398 [info ]: Finished running [  0.16s] (1 nodes, 0 skipped, 0 errors)
+08:40:59.281402 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.16s]
+08:40:59.894520 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:41:00.044849 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [1.1s]
+==================== 2026-11-25T08:41:11.018843Z | 01a211dd-b069-7770-87d9-fc47dfa1727e ====================
+08:41:11.018913 [info ]: dbt 2.0.12
+08:41:11.019055 [info ]: Started loading project
+08:41:11.019455 [info ]: Loading profiles.yml
+08:41:11.120247 [debug]:    Started loading packages
+08:41:11.120604 [debug]:     Loaded [  0.00s] packages
+08:41:11.121142 [info ]: Finished loading project [  0.10s]
+08:41:11.121406 [info ]: Started parsing (3 nodes)
+08:41:11.133934 [debug]:    Started building model nodes
+08:41:11.133948 [debug]:   Finished [  0.00s] building model nodes
+08:41:11.134035 [debug]:    Started building model nodes
+08:41:11.134042 [debug]:   Finished [  0.00s] building model nodes
+08:41:11.134182 [debug]: Finished parsing models/sources.yml [  0.00s]
+08:41:11.134283 [debug]:    Started resolving data tests
+08:41:11.134299 [debug]:   Finished [  0.00s] resolving data tests
+08:41:11.134331 [debug]:    Started resolving data tests
+08:41:11.134331 [debug]: Finished parsing target/inline_8eb08ffd.sql [  0.00s]
+08:41:11.134342 [debug]:   Finished [  0.00s] resolving data tests
+08:41:11.134342 [debug]:    Started building model nodes
+08:41:11.134604 [debug]:   Finished [  0.00s] building model nodes
+08:41:11.134796 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+08:41:11.134803 [debug]:    Started building model nodes
+08:41:11.134804 [debug]:    Started resolving data tests
+08:41:11.134816 [debug]:   Finished [  0.00s] resolving data tests
+08:41:11.134982 [debug]:   Finished [  0.00s] building model nodes
+08:41:11.135163 [debug]:    Started resolving data tests
+08:41:11.135171 [debug]:   Finished [  0.00s] resolving data tests
+08:41:11.135323 [debug]:    Started typechecking macros
+08:41:11.194307 [debug]:   Finished [  0.06s] typechecking macros
+08:41:11.194773 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+08:41:11.195025 [info ]: Started scheduling
+08:41:11.195079 [info ]: Finished scheduling [  0.00s]
+08:41:11.195226 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "users" }) and interval: None
+08:41:11.195795 [info ]: Started building task graph
+08:41:11.195842 [info ]: Finished building task graph [  0.00s]
+08:41:11.196944 [info ]: Started rendering (1 nodes)
+08:41:11.196970 [info ]: Started model main.inline
+08:41:11.196977 [debug]: Started rendering model main.inline
+08:41:11.197503 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_8eb08ffd.sql
+08:41:11.197557 [debug]: Finished rendering [  0.00s] model main.inline [success]
+08:41:11.197563 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+08:41:11.197578 [info ]: Started analyzing (1 nodes)
+08:41:11.197583 [debug]: Started analyzing model main.inline
+08:41:11.203659 [debug]: Finished analyzing [  0.01s] model main.inline [success]
+08:41:11.203666 [info ]: Finished analyzing [  0.01s] (1 nodes, 0 skipped, 0 errors)
+08:41:11.203673 [info ]: Started running (1 nodes)
+08:41:11.203676 [info ]: Started running model main.inline
+08:41:11.204019 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:41:11.313171 [error]: [Generic (dbt1000)]: Internal: Parser Error: syntax error at or near "limit"
+
+LINE 5:   limit 40
+          ^ (sqlstate: [0, 0, 0, 0, 0], vendor_code: -2147483648)
+08:41:11.313390 [info ]: Finished running [  0.11s] model main.inline [error]
+08:41:11.313400 [info ]: Finished running [  0.11s] (1 nodes, 0 skipped, 1 errors)
+08:41:11.313403 [info ]:     Failed model main.inline (ephemeral) [1 of 1 in 0.12s]
+08:41:11.935870 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:41:12.072739 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' with 1 error for target 'dev' [1.1s]
+==================== 2026-11-25T08:41:16.303366Z | 01a211dd-c50e-7db1-9a4e-4e6605265082 ====================
+08:41:16.303444 [info ]: dbt 2.0.12
+08:41:16.303615 [info ]: Started loading project
+08:41:16.304095 [info ]: Loading profiles.yml
+08:41:16.400684 [debug]:    Started loading packages
+08:41:16.401042 [debug]:     Loaded [  0.00s] packages
+08:41:16.401668 [info ]: Finished loading project [  0.10s]
+08:41:16.401805 [info ]: Started parsing (3 nodes)
+08:41:16.414010 [debug]:    Started building model nodes
+08:41:16.414012 [debug]:    Started building model nodes
+08:41:16.414024 [debug]:   Finished [  0.00s] building model nodes
+08:41:16.414029 [debug]:   Finished [  0.00s] building model nodes
+08:41:16.414086 [debug]: Finished parsing models/sources.yml [  0.00s]
+08:41:16.414371 [debug]:    Started resolving data tests
+08:41:16.414390 [debug]:   Finished [  0.00s] resolving data tests
+08:41:16.414400 [debug]: Finished parsing target/inline_be151e7d.sql [  0.00s]
+08:41:16.414408 [debug]:    Started building model nodes
+08:41:16.414423 [debug]:    Started resolving data tests
+08:41:16.414436 [debug]:   Finished [  0.00s] resolving data tests
+08:41:16.414674 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+08:41:16.414684 [debug]:    Started building model nodes
+08:41:16.414685 [debug]:   Finished [  0.00s] building model nodes
+08:41:16.414872 [debug]:   Finished [  0.00s] building model nodes
+08:41:16.414891 [debug]:    Started resolving data tests
+08:41:16.414900 [debug]:   Finished [  0.00s] resolving data tests
+08:41:16.415064 [debug]:    Started resolving data tests
+08:41:16.415072 [debug]:   Finished [  0.00s] resolving data tests
+08:41:16.415220 [debug]:    Started typechecking macros
+08:41:16.472474 [debug]:   Finished [  0.06s] typechecking macros
+08:41:16.472922 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+08:41:16.473109 [info ]: Started scheduling
+08:41:16.473167 [info ]: Finished scheduling [  0.00s]
+08:41:16.473312 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "users" }) and interval: None
+08:41:16.473873 [info ]: Started building task graph
+08:41:16.473926 [info ]: Finished building task graph [  0.00s]
+08:41:16.474698 [info ]: Started rendering (1 nodes)
+08:41:16.474710 [info ]: Started model main.inline
+08:41:16.474718 [debug]: Started rendering model main.inline
+08:41:16.475147 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_be151e7d.sql
+08:41:16.475197 [debug]: Finished rendering [  0.00s] model main.inline [success]
+08:41:16.475205 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+08:41:16.475220 [info ]: Started analyzing (1 nodes)
+08:41:16.475225 [debug]: Started analyzing model main.inline
+08:41:16.480432 [debug]: Finished analyzing [  0.01s] model main.inline [success]
+08:41:16.480439 [info ]: Finished analyzing [  0.01s] (1 nodes, 0 skipped, 0 errors)
+08:41:16.480448 [info ]: Started running (1 nodes)
+08:41:16.480451 [info ]: Started running model main.inline
+08:41:16.480780 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:41:16.502352 [error]: [Generic (dbt1000)]: Internal: Parser Error: syntax error at or near "limit"
+
+LINE 5:   limit 5
+          ^ (sqlstate: [0, 0, 0, 0, 0], vendor_code: -2147483648)
+08:41:16.502408 [info ]: Finished running [  0.02s] model main.inline [error]
+08:41:16.502415 [info ]: Finished running [  0.02s] (1 nodes, 0 skipped, 1 errors)
+08:41:16.502418 [info ]:     Failed model main.inline (ephemeral) [1 of 1 in 0.03s]
+08:41:17.236878 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:41:17.380080 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' with 1 error for target 'dev' [1.1s]
+==================== 2026-11-25T08:41:22.240481Z | 01a211dd-dc3f-7503-9dbb-cf93baac3d3b ====================
+08:41:22.240557 [info ]: dbt 2.0.12
+08:41:22.240702 [info ]: Started loading project
+08:41:22.241043 [info ]: Loading profiles.yml
+08:41:22.336978 [debug]:    Started loading packages
+08:41:22.337343 [debug]:     Loaded [  0.00s] packages
+08:41:22.337991 [info ]: Finished loading project [  0.10s]
+08:41:22.338126 [info ]: Started parsing (3 nodes)
+08:41:22.350614 [debug]:    Started building model nodes
+08:41:22.350618 [debug]:    Started building model nodes
+08:41:22.350631 [debug]:   Finished [  0.00s] building model nodes
+08:41:22.350647 [debug]:   Finished [  0.00s] building model nodes
+08:41:22.350655 [debug]: Finished parsing models/sources.yml [  0.00s]
+08:41:22.351026 [debug]:    Started resolving data tests
+08:41:22.351026 [debug]:    Started resolving data tests
+08:41:22.351048 [debug]:   Finished [  0.00s] resolving data tests
+08:41:22.351048 [debug]:   Finished [  0.00s] resolving data tests
+08:41:22.351139 [debug]: Finished parsing target/inline_fe5d795d.sql [  0.00s]
+08:41:22.351148 [debug]:    Started building model nodes
+08:41:22.351207 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+08:41:22.351217 [debug]:    Started building model nodes
+08:41:22.351410 [debug]:   Finished [  0.00s] building model nodes
+08:41:22.351425 [debug]:   Finished [  0.00s] building model nodes
+08:41:22.351713 [debug]:    Started resolving data tests
+08:41:22.351721 [debug]:    Started resolving data tests
+08:41:22.351722 [debug]:   Finished [  0.00s] resolving data tests
+08:41:22.351729 [debug]:   Finished [  0.00s] resolving data tests
+08:41:22.351866 [debug]:    Started typechecking macros
+08:41:22.409406 [debug]:   Finished [  0.06s] typechecking macros
+08:41:22.409826 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+08:41:22.410030 [info ]: Started scheduling
+08:41:22.410084 [info ]: Finished scheduling [  0.00s]
+08:41:22.410227 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "users" }) and interval: None
+08:41:22.410775 [info ]: Started building task graph
+08:41:22.410830 [info ]: Finished building task graph [  0.00s]
+08:41:22.411642 [info ]: Started rendering (1 nodes)
+08:41:22.411654 [info ]: Started model main.inline
+08:41:22.411662 [debug]: Started rendering model main.inline
+08:41:22.412278 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_fe5d795d.sql
+08:41:22.412352 [debug]: Finished rendering [  0.00s] model main.inline [success]
+08:41:22.412358 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+08:41:22.412374 [info ]: Started analyzing (1 nodes)
+08:41:22.412378 [debug]: Started analyzing model main.inline
+08:41:22.418768 [debug]: Finished analyzing [  0.01s] model main.inline [success]
+08:41:22.418783 [info ]: Finished analyzing [  0.01s] (1 nodes, 0 skipped, 0 errors)
+08:41:22.418794 [info ]: Started running (1 nodes)
+08:41:22.418799 [info ]: Started running model main.inline
+08:41:22.419181 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:41:22.474220 [debug]: Query executed on node unknown:
+
+  
+  select json_keys(to_json(any_value(after))) as cols from read_parquet('s3://bronze/topics/transactions.public.users/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)
+  
+  limit 5
+
+08:41:22.474893 [info ]: Query show_sql_operation_inline
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ cols                                                                                                     │
+╞══════════════════════════════════════════════════════════════════════════════════════════════════════════╡
+│ [id, email, phone_number, first_name, last_name, date_of_birth, address, status, created_at, updated_at] │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+1 rows.
+08:41:22.474938 [info ]: Finished running [  0.06s] model main.inline [success]
+08:41:22.474946 [info ]: Finished running [  0.06s] (1 nodes, 0 skipped, 0 errors)
+08:41:22.474949 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.06s]
+08:41:23.157772 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:41:23.296516 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [1.1s]
+==================== 2026-11-25T08:49:53.378232Z | 01a211e5-a8d1-7e30-a284-61b13e34679a ====================
+08:49:53.384731 [info ]: dbt 2.0.12
+08:49:53.393123 [info ]: Started loading project
+08:49:53.409305 [info ]: Loading profiles.yml
+08:49:53.559067 [debug]:    Started loading packages
+08:49:53.570963 [debug]:     Loaded [  0.01s] packages
+08:49:53.578163 [info ]: Finished loading project [  0.19s]
+08:49:53.583191 [info ]: Started parsing (3 nodes)
+08:49:53.628371 [debug]:    Started building model nodes
+08:49:53.628377 [debug]:    Started building model nodes
+08:49:53.628408 [debug]:   Finished [  0.00s] building model nodes
+08:49:53.628406 [debug]:   Finished [  0.00s] building model nodes
+08:49:53.629693 [debug]: Finished parsing models/sources.yml [  0.01s]
+08:49:53.629834 [debug]:    Started resolving data tests
+08:49:53.629835 [debug]:    Started resolving data tests
+08:49:53.629893 [debug]:   Finished [  0.00s] resolving data tests
+08:49:53.629899 [debug]:   Finished [  0.00s] resolving data tests
+08:49:53.635492 [debug]: Finished parsing target/inline_9f2fd6fb.sql [  0.01s]
+08:49:53.635492 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+08:49:53.635503 [debug]:    Started building model nodes
+08:49:53.635506 [debug]:    Started building model nodes
+08:49:53.637448 [debug]:   Finished [  0.00s] building model nodes
+08:49:53.637449 [debug]:   Finished [  0.00s] building model nodes
+08:49:53.637829 [debug]:    Started resolving data tests
+08:49:53.637834 [debug]:    Started resolving data tests
+08:49:53.637839 [debug]:   Finished [  0.00s] resolving data tests
+08:49:53.637844 [debug]:   Finished [  0.00s] resolving data tests
+08:49:53.638663 [debug]:    Started typechecking macros
+08:49:53.696304 [debug]:   Finished [  0.06s] typechecking macros
+08:49:53.699448 [info ]: Finished parsing [  0.12s] (3 nodes, 0 skipped, 0 errors)
+08:49:53.703961 [info ]: Started scheduling
+08:49:53.705826 [info ]: Finished scheduling [  0.00s]
+08:49:53.708627 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+08:49:53.718580 [info ]: Started building task graph
+08:49:53.722223 [info ]: Finished building task graph [  0.00s]
+08:49:53.745330 [info ]: Started rendering (1 nodes)
+08:49:53.745983 [info ]: Started model main.inline
+08:49:53.746251 [debug]: Started rendering model main.inline
+08:49:53.755775 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_9f2fd6fb.sql
+08:49:53.756690 [debug]: Finished rendering [  0.01s] model main.inline [success]
+08:49:53.756701 [info ]: Finished rendering [  0.01s] (1 nodes, 0 skipped, 0 errors)
+08:49:53.757201 [info ]: Started analyzing (1 nodes)
+08:49:53.757215 [debug]: Started analyzing model main.inline
+08:49:53.773576 [debug]: Finished analyzing [  0.02s] model main.inline [success]
+08:49:53.773588 [info ]: Finished analyzing [  0.02s] (1 nodes, 0 skipped, 0 errors)
+08:49:53.773600 [info ]: Started running (1 nodes)
+08:49:53.773604 [info ]: Started running model main.inline
+08:49:53.776810 [debug]: DuckDB driver resolved: duckdb 1.5.4
+08:49:53.986373 [debug]: Query executed on node unknown:
+
+  
+  select op, after.id, after.txn_type, after.status, after.amount, after.description from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) order by after.created_at
+  
+  limit 10
+
+08:49:53.989901 [info ]: Query show_sql_operation_inline
+┌────┬──────────────────────────────────────┬──────────┬───────────┬────────┬───────────────────────────────────┐
+│ op ┆ id                                   ┆ txn_type ┆ status    ┆ amount ┆ description                       │
+╞════╪══════════════════════════════════════╪══════════╪═══════════╪════════╪═══════════════════════════════════╡
+│ r  ┆ 01a20dde-c993-7432-8e50-43d6be6f66ef ┆ deposit  ┆ completed ┆ 500.00 ┆ test deposit                      │
+│ r  ┆ 01a20de2-3f76-7647-bc00-43c4ca94cfdb ┆ transfer ┆ completed ┆ 150.00 ┆ test transfer                     │
+│ c  ┆ 01a211e4-090b-73fb-9d6d-7b29882374fa ┆ deposit  ┆ pending   ┆ 275.00 ┆ payload-path verification deposit │
+│ u  ┆ 01a211e4-090b-73fb-9d6d-7b29882374fa ┆ deposit  ┆ completed ┆ 275.00 ┆ payload-path verification deposit │
+└────┴──────────────────────────────────────┴──────────┴───────────┴────────┴───────────────────────────────────┘
+4 rows.
+08:49:53.989977 [info ]: Finished running [  0.22s] model main.inline [success]
+08:49:53.989985 [info ]: Finished running [  0.22s] (1 nodes, 0 skipped, 0 errors)
+08:49:53.989989 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.24s]
+08:49:55.004775 [info ]: New version available 2.0.13 (run `dbt system update`)
+08:49:55.242441 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [1.9s]
+==================== 2026-11-25T10:21:30.717465Z | 01a21239-8ac9-7343-8b31-725e0fc25dfa ====================
+10:21:30.720626 [info ]: dbt 2.0.12
+10:21:30.722991 [info ]: Started loading project
+10:21:30.729033 [info ]: Loading profiles.yml
+10:21:30.873183 [debug]:    Started loading packages
+10:21:30.884546 [debug]:     Loaded [  0.01s] packages
+10:21:30.889863 [info ]: Finished loading project [  0.17s]
+10:21:30.893700 [info ]: Started parsing (2 nodes)
+10:21:30.928826 [debug]:    Started building model nodes
+10:21:30.928832 [debug]:    Started building model nodes
+10:21:30.928851 [debug]:   Finished [  0.00s] building model nodes
+10:21:30.928851 [debug]:   Finished [  0.00s] building model nodes
+10:21:30.929376 [debug]: Finished parsing models/sources.yml [  0.01s]
+10:21:30.929698 [debug]:    Started resolving data tests
+10:21:30.929698 [debug]:    Started resolving data tests
+10:21:30.929732 [debug]:   Finished [  0.00s] resolving data tests
+10:21:30.929733 [debug]:   Finished [  0.00s] resolving data tests
+10:21:30.939109 [debug]: Finished parsing models/stg_transactions.sql [  0.01s]
+10:21:30.939119 [debug]:    Started building model nodes
+10:21:30.941347 [debug]:   Finished [  0.00s] building model nodes
+10:21:30.941540 [debug]:    Started resolving data tests
+10:21:30.941548 [debug]:   Finished [  0.00s] resolving data tests
+10:21:30.942428 [debug]:    Started typechecking macros
+10:21:30.999993 [debug]:   Finished [  0.06s] typechecking macros
+10:21:31.003196 [info ]: Finished parsing [  0.11s] (2 nodes, 0 skipped, 0 errors)
+10:21:31.037572 [info ]: Started scheduling
+10:21:31.039245 [info ]: Finished scheduling [  0.00s]
+10:21:31.041870 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+10:21:31.052696 [info ]: Started building task graph
+10:21:31.056461 [info ]: Finished building task graph [  0.00s]
+10:21:31.084418 [debug]: DuckDB driver resolved: duckdb 1.5.4
+10:21:31.239568 [debug]: create_debug_span(...).entered() took 246.792µs
+10:21:31.245523 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 2.034875ms
+10:21:31.245535 [debug]: reader.schema() took 209ns
+10:21:31.245553 [debug]: batch-consume loop (for res in reader) took 15.25µs
+10:21:31.245572 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 5.992417ms
+10:21:31.245894 [debug]: concat_batches + normalize_result_column_names took 317.25µs
+10:21:31.246346 [debug]: record_current_span_status_from_attrs took 448.083µs
+10:21:31.246566 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    select schema_name
+    from system.information_schema.schemata
+    
+    where lower(catalog_name) = '"warehouse"'
+    
+  
+  
+10:21:31.246577 [debug]: drop(query_span_guard) (span exit/export) took 226µs
+10:21:31.250512 [debug]: create_debug_span(...).entered() took 5.208µs
+10:21:31.251011 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 348µs
+10:21:31.251015 [debug]: reader.schema() took 0ns
+10:21:31.251157 [debug]: batch-consume loop (for res in reader) took 137.625µs
+10:21:31.251167 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 649.917µs
+10:21:31.251172 [debug]: concat_batches + normalize_result_column_names took 1.958µs
+10:21:31.251176 [debug]: record_current_span_status_from_attrs took 750ns
+10:21:31.251178 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+        select type from duckdb_databases()
+        where lower(database_name)='warehouse'
+        and type='sqlite'
+    
+  
+10:21:31.251184 [debug]: drop(query_span_guard) (span exit/export) took 6.542µs
+10:21:31.251888 [debug]: create_debug_span(...).entered() took 3.792µs
+10:21:31.252458 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 166.333µs
+10:21:31.252462 [debug]: reader.schema() took 0ns
+10:21:31.252500 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 606.583µs
+10:21:31.252505 [debug]: concat_batches + normalize_result_column_names took 1.125µs
+10:21:31.252507 [debug]: record_current_span_status_from_attrs took 291ns
+10:21:31.252510 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    
+        create schema if not exists "warehouse"."main"
+    
+10:21:31.252514 [debug]: drop(query_span_guard) (span exit/export) took 4.417µs
+10:21:31.254370 [info ]: Started rendering (1 nodes)
+10:21:31.254449 [info ]: Started model main.stg_transactions
+10:21:31.254565 [debug]: Started rendering model main.stg_transactions
+10:21:31.258716 [debug]: Compiled SQL for node model.banking_app.stg_transactions at target/compiled/banking_app/models/stg_transactions.sql
+10:21:31.259212 [debug]: Finished rendering [  0.00s] model main.stg_transactions [success]
+10:21:31.259224 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+10:21:31.259959 [info ]: Started analyzing (1 nodes)
+10:21:31.260238 [debug]: Started analyzing model main.stg_transactions
+10:21:31.277038 [debug]: Finished analyzing [  0.02s] model main.stg_transactions [success]
+10:21:31.277052 [info ]: Finished analyzing [  0.02s] (1 nodes, 0 skipped, 0 errors)
+10:21:31.277065 [info ]: Started running (1 nodes)
+10:21:31.277070 [info ]: Started running model main.stg_transactions
+10:21:31.290675 [debug]: create_debug_span(...).entered() took 6µs
+10:21:31.293358 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.6725ms
+10:21:31.293370 [debug]: reader.schema() took 166ns
+10:21:31.293670 [debug]: batch-consume loop (for res in reader) took 296.208µs
+10:21:31.293793 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 3.107375ms
+10:21:31.294517 [debug]: concat_batches + normalize_result_column_names took 719.834µs
+10:21:31.294523 [debug]: record_current_span_status_from_attrs took 1.833µs
+10:21:31.294528 [debug]: Query executed on node model.banking_app.stg_transactions:
+SELECT table_catalog, table_schema, table_name, table_type FROM information_schema.tables WHERE table_schema = 'main' AND lower(table_catalog) = lower('warehouse')
+10:21:31.294540 [debug]: drop(query_span_guard) (span exit/export) took 14.417µs
+10:21:31.296416 [debug]: Writing runtime sql for node "model.banking_app.stg_transactions"
+10:21:31.296944 [debug]: create_debug_span(...).entered() took 5.458µs
+10:21:31.319586 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.881ms
+10:21:31.319603 [debug]: reader.schema() took 42ns
+10:21:31.319614 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 22.665917ms
+10:21:31.319621 [debug]: concat_batches + normalize_result_column_names took 3.834µs
+10:21:31.319625 [debug]: record_current_span_status_from_attrs took 1.459µs
+10:21:31.319630 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+  
+  create view "warehouse"."main"."stg_transactions__dbt_tmp" as (
+    -- Smoke test, not a real staging model: the only question it answers is
+-- whether dbt/DuckDB can reach MinIO and parse a bronze object at all.
+--
+-- select * on purpose. The Debezium envelope comes back as nested structs
+-- (op, before, after, source, ts_ms/ts_us/ts_ns, transaction) plus event_date
+-- from the Hive partition, so this is also the quickest way to see the shape
+-- the real silver models will have to unnest.
+select *
+from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)
+limit 10
+  );
+
+10:21:31.319643 [debug]: drop(query_span_guard) (span exit/export) took 14.5µs
+10:21:31.321146 [debug]: create_debug_span(...).entered() took 6.375µs
+10:21:31.321665 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 251.166µs
+10:21:31.321671 [debug]: reader.schema() took 42ns
+10:21:31.321677 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 524.125µs
+10:21:31.321681 [debug]: concat_batches + normalize_result_column_names took 1.917µs
+10:21:31.321685 [debug]: record_current_span_status_from_attrs took 667ns
+10:21:31.321688 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+alter view "warehouse"."main"."stg_transactions" rename to "stg_transactions__dbt_backup"
+10:21:31.321694 [debug]: drop(query_span_guard) (span exit/export) took 6.917µs
+10:21:31.322171 [debug]: create_debug_span(...).entered() took 3.125µs
+10:21:31.322290 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 85.042µs
+10:21:31.322294 [debug]: reader.schema() took 42ns
+10:21:31.322298 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 121.791µs
+10:21:31.322301 [debug]: concat_batches + normalize_result_column_names took 542ns
+10:21:31.322304 [debug]: record_current_span_status_from_attrs took 250ns
+10:21:31.322306 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+alter view "warehouse"."main"."stg_transactions__dbt_tmp" rename to "stg_transactions"
+10:21:31.322311 [debug]: drop(query_span_guard) (span exit/export) took 5.083µs
+10:21:31.322943 [debug]: create_debug_span(...).entered() took 2.375µs
+10:21:31.323207 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 60.333µs
+10:21:31.323211 [debug]: reader.schema() took 42ns
+10:21:31.323215 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 268.542µs
+10:21:31.323218 [debug]: concat_batches + normalize_result_column_names took 458ns
+10:21:31.323221 [debug]: record_current_span_status_from_attrs took 167ns
+10:21:31.323223 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+      drop view if exists "warehouse"."main"."stg_transactions__dbt_backup" cascade
+    
+10:21:31.323227 [debug]: drop(query_span_guard) (span exit/export) took 4.459µs
+10:21:31.324300 [info ]: Finished running [  0.05s] model main.stg_transactions [success]
+10:21:31.324308 [info ]: Finished running [  0.05s] (1 nodes, 0 skipped, 0 errors)
+10:21:31.324314 [info ]:  Succeeded model main.stg_transactions (view) [1 of 1 in 0.07s]
+10:21:37.214382 [info ]: 
+==================== Execution Summary =====================
+Finished 'run' successfully for target 'dev' [6.5s]
+Processed: 1 model
+Summary: 1 total | 1 success
+==================== 2026-11-25T10:21:37.245407Z | 01a21239-a45c-7983-8818-ed1e01cf8d64 ====================
+10:21:37.245535 [info ]: dbt 2.0.12
+10:21:37.246411 [info ]: Started loading project
+10:21:37.247231 [info ]: Loading profiles.yml
+10:21:37.363780 [debug]:    Started loading packages
+10:21:37.364146 [debug]:     Loaded [  0.00s] packages
+10:21:37.364736 [info ]: Finished loading project [  0.12s]
+10:21:37.365033 [info ]: Started parsing (3 nodes)
+10:21:37.377098 [debug]:    Started building model nodes
+10:21:37.377094 [debug]:    Started building model nodes
+10:21:37.377110 [debug]:   Finished [  0.00s] building model nodes
+10:21:37.377110 [debug]:   Finished [  0.00s] building model nodes
+10:21:37.377293 [debug]: Finished parsing models/sources.yml [  0.00s]
+10:21:37.377508 [debug]:    Started resolving data tests
+10:21:37.377514 [debug]:    Started resolving data tests
+10:21:37.377524 [debug]:   Finished [  0.00s] resolving data tests
+10:21:37.377526 [debug]:   Finished [  0.00s] resolving data tests
+10:21:37.377617 [debug]: Finished parsing target/inline_255940d9.sql [  0.00s]
+10:21:37.377626 [debug]:    Started building model nodes
+10:21:37.377734 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+10:21:37.377743 [debug]:    Started building model nodes
+10:21:37.377901 [debug]:   Finished [  0.00s] building model nodes
+10:21:37.377951 [debug]:   Finished [  0.00s] building model nodes
+10:21:37.378162 [debug]:    Started resolving data tests
+10:21:37.378170 [debug]:   Finished [  0.00s] resolving data tests
+10:21:37.378208 [debug]:    Started resolving data tests
+10:21:37.378216 [debug]:   Finished [  0.00s] resolving data tests
+10:21:37.378359 [debug]:    Started typechecking macros
+10:21:37.437512 [debug]:   Finished [  0.06s] typechecking macros
+10:21:37.437977 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+10:21:37.438202 [info ]: Started scheduling
+10:21:37.438862 [info ]: Finished scheduling [  0.00s]
+10:21:37.439002 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+10:21:37.439551 [info ]: Started building task graph
+10:21:37.439817 [info ]: Finished building task graph [  0.00s]
+10:21:37.440561 [info ]: Started rendering (1 nodes)
+10:21:37.440571 [info ]: Started model main.inline
+10:21:37.440577 [debug]: Started rendering model main.inline
+10:21:37.441015 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_255940d9.sql
+10:21:37.441054 [debug]: Finished rendering [  0.00s] model main.inline [success]
+10:21:37.441059 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+10:21:37.441071 [info ]: Started analyzing (1 nodes)
+10:21:37.441075 [debug]: Started analyzing model main.inline
+10:21:37.445873 [debug]: Finished analyzing [  0.00s] model main.inline [success]
+10:21:37.445881 [info ]: Finished analyzing [  0.00s] (1 nodes, 0 skipped, 0 errors)
+10:21:37.445889 [info ]: Started running (1 nodes)
+10:21:37.445892 [info ]: Started running model main.inline
+10:21:37.446757 [debug]: DuckDB driver resolved: duckdb 1.5.4
+10:21:37.493253 [debug]: Query executed on node unknown:
+
+  
+  select op, after.txn_type, after.status, after.amount, after.description from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) order by after.created_at, op
+  
+  limit 12
+
+10:21:37.494788 [info ]: Query show_sql_operation_inline
+┌────┬──────────┬───────────┬────────┬───────────────────────────────────┐
+│ op ┆ txn_type ┆ status    ┆ amount ┆ description                       │
+╞════╪══════════╪═══════════╪════════╪═══════════════════════════════════╡
+│ r  ┆ deposit  ┆ completed ┆ 500.00 ┆ test deposit                      │
+│ r  ┆ transfer ┆ completed ┆ 150.00 ┆ test transfer                     │
+│ c  ┆ deposit  ┆ pending   ┆ 275.00 ┆ payload-path verification deposit │
+│ u  ┆ deposit  ┆ completed ┆ 275.00 ┆ payload-path verification deposit │
+│ c  ┆ transfer ┆ pending   ┆ 90.00  ┆ containerized cluster e2e         │
+│ u  ┆ transfer ┆ completed ┆ 90.00  ┆ containerized cluster e2e         │
+└────┴──────────┴───────────┴────────┴───────────────────────────────────┘
+6 rows.
+10:21:37.494942 [info ]: Finished running [  0.05s] model main.inline [success]
+10:21:37.494954 [info ]: Finished running [  0.05s] (1 nodes, 0 skipped, 0 errors)
+10:21:37.494958 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.05s]
+10:21:37.502536 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [257ms]
+==================== 2026-11-26T09:19:25.882149Z | 01a21727-10a7-7841-8e79-a6d6b6aad249 ====================
+09:19:25.883455 [info ]: dbt 2.0.12
+09:19:25.885190 [info ]: Started loading project
+09:19:25.894560 [info ]: Loading profiles.yml
+09:19:26.040183 [debug]:    Started loading packages
+09:19:26.052416 [debug]:     Loaded [  0.01s] packages
+09:19:26.058585 [info ]: Finished loading project [  0.17s]
+09:19:26.061340 [info ]: Started parsing (2 nodes)
+09:19:26.095336 [debug]:    Started building model nodes
+09:19:26.095331 [debug]:    Started building model nodes
+09:19:26.095487 [debug]:   Finished [  0.00s] building model nodes
+09:19:26.095487 [debug]:   Finished [  0.00s] building model nodes
+09:19:26.096022 [debug]: Finished parsing models/sources.yml [  0.01s]
+09:19:26.096935 [debug]:    Started resolving data tests
+09:19:26.096936 [debug]:    Started resolving data tests
+09:19:26.097195 [debug]:   Finished [  0.00s] resolving data tests
+09:19:26.097196 [debug]:   Finished [  0.00s] resolving data tests
+09:19:26.107345 [debug]: Finished parsing models/stg_transactions.sql [  0.01s]
+09:19:26.107363 [debug]:    Started building model nodes
+09:19:26.110125 [debug]:   Finished [  0.00s] building model nodes
+09:19:26.110341 [debug]:    Started resolving data tests
+09:19:26.110352 [debug]:   Finished [  0.00s] resolving data tests
+09:19:26.111624 [debug]:    Started typechecking macros
+09:19:26.167585 [debug]:   Finished [  0.06s] typechecking macros
+09:19:26.171353 [info ]: Finished parsing [  0.11s] (2 nodes, 0 skipped, 0 errors)
+09:19:26.205418 [info ]: Started scheduling
+09:19:26.207807 [info ]: Finished scheduling [  0.00s]
+09:19:26.211439 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+09:19:26.224847 [info ]: Started building task graph
+09:19:26.227149 [info ]: Finished building task graph [  0.00s]
+09:19:26.258308 [debug]: DuckDB driver resolved: duckdb 1.5.4
+09:19:26.446845 [debug]: create_debug_span(...).entered() took 238.417µs
+09:19:26.451188 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.377917ms
+09:19:26.451199 [debug]: reader.schema() took 83ns
+09:19:26.451209 [debug]: batch-consume loop (for res in reader) took 7.625µs
+09:19:26.451220 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 4.362625ms
+09:19:26.451615 [debug]: concat_batches + normalize_result_column_names took 390.292µs
+09:19:26.451739 [debug]: record_current_span_status_from_attrs took 116.834µs
+09:19:26.451842 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    select schema_name
+    from system.information_schema.schemata
+    
+    where lower(catalog_name) = '"warehouse"'
+    
+  
+  
+09:19:26.451853 [debug]: drop(query_span_guard) (span exit/export) took 109.542µs
+09:19:26.455166 [debug]: create_debug_span(...).entered() took 4.125µs
+09:19:26.455676 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 389.042µs
+09:19:26.455681 [debug]: reader.schema() took 42ns
+09:19:26.455700 [debug]: batch-consume loop (for res in reader) took 16.875µs
+09:19:26.455706 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 533.833µs
+09:19:26.455710 [debug]: concat_batches + normalize_result_column_names took 1.834µs
+09:19:26.455714 [debug]: record_current_span_status_from_attrs took 708ns
+09:19:26.455716 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+        select type from duckdb_databases()
+        where lower(database_name)='warehouse'
+        and type='sqlite'
+    
+  
+09:19:26.455722 [debug]: drop(query_span_guard) (span exit/export) took 6.583µs
+09:19:26.456480 [debug]: create_debug_span(...).entered() took 1.625µs
+09:19:26.456691 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 145.833µs
+09:19:26.456694 [debug]: reader.schema() took 42ns
+09:19:26.456825 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 336.584µs
+09:19:26.456828 [debug]: concat_batches + normalize_result_column_names took 1µs
+09:19:26.456830 [debug]: record_current_span_status_from_attrs took 208ns
+09:19:26.456833 [debug]: Query executed on node unknown:
+/* {"app": "dbt", "connection_name": "", "dbt_version": "2.0.0", "profile_name": "banking_app", "target_name": "dev"} */
+
+    
+    
+        create schema if not exists "warehouse"."main"
+    
+09:19:26.456837 [debug]: drop(query_span_guard) (span exit/export) took 4µs
+09:19:26.458704 [info ]: Started rendering (1 nodes)
+09:19:26.459276 [info ]: Started model main.stg_transactions
+09:19:26.459560 [debug]: Started rendering model main.stg_transactions
+09:19:26.464131 [debug]: Compiled SQL for node model.banking_app.stg_transactions at target/compiled/banking_app/models/stg_transactions.sql
+09:19:26.464479 [debug]: Finished rendering [  0.00s] model main.stg_transactions [success]
+09:19:26.464487 [info ]: Finished rendering [  0.01s] (1 nodes, 0 skipped, 0 errors)
+09:19:26.465124 [info ]: Started analyzing (1 nodes)
+09:19:26.465419 [debug]: Started analyzing model main.stg_transactions
+09:19:26.482461 [debug]: Finished analyzing [  0.02s] model main.stg_transactions [success]
+09:19:26.482471 [info ]: Finished analyzing [  0.02s] (1 nodes, 0 skipped, 0 errors)
+09:19:26.482480 [info ]: Started running (1 nodes)
+09:19:26.482484 [info ]: Started running model main.stg_transactions
+09:19:26.494058 [debug]: create_debug_span(...).entered() took 4.917µs
+09:19:26.496038 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 1.370625ms
+09:19:26.496044 [debug]: reader.schema() took 167ns
+09:19:26.496318 [debug]: batch-consume loop (for res in reader) took 270.459µs
+09:19:26.496339 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 2.272667ms
+09:19:26.496956 [debug]: concat_batches + normalize_result_column_names took 612.542µs
+09:19:26.496967 [debug]: record_current_span_status_from_attrs took 4.666µs
+09:19:26.496974 [debug]: Query executed on node model.banking_app.stg_transactions:
+SELECT table_catalog, table_schema, table_name, table_type FROM information_schema.tables WHERE table_schema = 'main' AND lower(table_catalog) = lower('warehouse')
+09:19:26.496982 [debug]: drop(query_span_guard) (span exit/export) took 9.417µs
+09:19:26.498829 [debug]: Writing runtime sql for node "model.banking_app.stg_transactions"
+09:19:26.499268 [debug]: create_debug_span(...).entered() took 3.959µs
+09:19:26.523592 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 567.291µs
+09:19:26.523602 [debug]: reader.schema() took 125ns
+09:19:26.523611 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 24.338208ms
+09:19:26.523617 [debug]: concat_batches + normalize_result_column_names took 3.208µs
+09:19:26.523621 [debug]: record_current_span_status_from_attrs took 1.209µs
+09:19:26.523625 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+  
+  create view "warehouse"."main"."stg_transactions__dbt_tmp" as (
+    -- Smoke test, not a real staging model: the only question it answers is
+-- whether dbt/DuckDB can reach MinIO and parse a bronze object at all.
+--
+-- select * on purpose. The Debezium envelope comes back as nested structs
+-- (op, before, after, source, ts_ms/ts_us/ts_ns, transaction) plus event_date
+-- from the Hive partition, so this is also the quickest way to see the shape
+-- the real silver models will have to unnest.
+select *
+from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)
+limit 10
+  );
+
+09:19:26.523635 [debug]: drop(query_span_guard) (span exit/export) took 12.25µs
+09:19:26.524911 [debug]: create_debug_span(...).entered() took 3.708µs
+09:19:26.525348 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 201.25µs
+09:19:26.525353 [debug]: reader.schema() took 41ns
+09:19:26.525357 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 440.584µs
+09:19:26.525361 [debug]: concat_batches + normalize_result_column_names took 1.583µs
+09:19:26.525363 [debug]: record_current_span_status_from_attrs took 500ns
+09:19:26.525366 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+alter view "warehouse"."main"."stg_transactions" rename to "stg_transactions__dbt_backup"
+09:19:26.525371 [debug]: drop(query_span_guard) (span exit/export) took 6.125µs
+09:19:26.525789 [debug]: create_debug_span(...).entered() took 2µs
+09:19:26.525899 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 84.875µs
+09:19:26.525902 [debug]: reader.schema() took 0ns
+09:19:26.525905 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 112.5µs
+09:19:26.525908 [debug]: concat_batches + normalize_result_column_names took 459ns
+09:19:26.525910 [debug]: record_current_span_status_from_attrs took 166ns
+09:19:26.525912 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+alter view "warehouse"."main"."stg_transactions__dbt_tmp" rename to "stg_transactions"
+09:19:26.525916 [debug]: drop(query_span_guard) (span exit/export) took 3.916µs
+09:19:26.526494 [debug]: create_debug_span(...).entered() took 1.541µs
+09:19:26.526584 [debug]: stmt.execute() (submit+wait_for_completion, returns reader) took 56.625µs
+09:19:26.526587 [debug]: reader.schema() took 0ns
+09:19:26.526591 [debug]: do_execute(conn) (closure: stmt.execute + schema + batch loop) took 93.125µs
+09:19:26.526593 [debug]: concat_batches + normalize_result_column_names took 375ns
+09:19:26.526595 [debug]: record_current_span_status_from_attrs took 166ns
+09:19:26.526597 [debug]: Query executed on node model.banking_app.stg_transactions:
+/* {"app": "dbt", "dbt_version": "2.0.0", "node_id": "model.banking_app.stg_transactions", "profile_name": "banking_app", "target_name": "dev"} */
+
+      drop view if exists "warehouse"."main"."stg_transactions__dbt_backup" cascade
+    
+09:19:26.526601 [debug]: drop(query_span_guard) (span exit/export) took 3.583µs
+09:19:26.527315 [info ]: Finished running [  0.04s] model main.stg_transactions [success]
+09:19:26.527322 [info ]: Finished running [  0.04s] (1 nodes, 0 skipped, 0 errors)
+09:19:26.527326 [info ]:  Succeeded model main.stg_transactions (view) [1 of 1 in 0.07s]
+09:19:32.372914 [info ]: 
+==================== Execution Summary =====================
+Finished 'run' successfully for target 'dev' [6.5s]
+Processed: 1 model
+Summary: 1 total | 1 success
+==================== 2026-11-26T09:19:38.898690Z | 01a21727-4391-7f51-9cfc-927ce16f3efa ====================
+09:19:38.898773 [info ]: dbt 2.0.12
+09:19:38.899147 [info ]: Started loading project
+09:19:38.899533 [info ]: Loading profiles.yml
+09:19:39.004505 [debug]:    Started loading packages
+09:19:39.004889 [debug]:     Loaded [  0.00s] packages
+09:19:39.005243 [info ]: Finished loading project [  0.11s]
+09:19:39.005584 [info ]: Started parsing (2 nodes)
+09:19:39.017017 [debug]:    Started building model nodes
+09:19:39.017022 [debug]:    Started building model nodes
+09:19:39.017029 [debug]:   Finished [  0.00s] building model nodes
+09:19:39.017030 [debug]:   Finished [  0.00s] building model nodes
+09:19:39.017217 [debug]: Finished parsing models/sources.yml [  0.00s]
+09:19:39.017414 [debug]:    Started resolving data tests
+09:19:39.017415 [debug]:    Started resolving data tests
+09:19:39.017433 [debug]:   Finished [  0.00s] resolving data tests
+09:19:39.017433 [debug]:   Finished [  0.00s] resolving data tests
+09:19:39.017946 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+09:19:39.017955 [debug]:    Started building model nodes
+09:19:39.018168 [debug]:   Finished [  0.00s] building model nodes
+09:19:39.018351 [debug]:    Started resolving data tests
+09:19:39.018362 [debug]:   Finished [  0.00s] resolving data tests
+09:19:39.018503 [debug]:    Started typechecking macros
+09:19:39.073551 [debug]:   Finished [  0.06s] typechecking macros
+09:19:39.074057 [info ]: Finished parsing [  0.07s] (2 nodes, 0 skipped, 0 errors)
+09:19:39.074264 [info ]: Started scheduling
+09:19:39.075185 [info ]: Finished scheduling [  0.00s]
+09:19:39.075490 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+09:19:39.076100 [info ]: Started building task graph
+09:19:39.076332 [info ]: Finished building task graph [  0.00s]
+09:19:39.077077 [info ]: Started rendering (1 nodes)
+09:19:39.077090 [info ]: Started model main.stg_transactions
+09:19:39.077099 [debug]: Started rendering model main.stg_transactions
+09:19:39.077500 [debug]: Compiled SQL for node model.banking_app.stg_transactions at target/compiled/banking_app/models/stg_transactions.sql
+09:19:39.077545 [debug]: Finished rendering [  0.00s] model main.stg_transactions [success]
+09:19:39.077551 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:19:39.077564 [info ]: Started analyzing (1 nodes)
+09:19:39.077570 [debug]: Started analyzing model main.stg_transactions
+09:19:39.081471 [debug]: Finished analyzing [  0.00s] model main.stg_transactions [success]
+09:19:39.081481 [info ]: Finished analyzing [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:19:39.081491 [info ]: Started running (1 nodes)
+09:19:39.081495 [info ]: Started running model main.stg_transactions
+09:19:39.082390 [debug]: DuckDB driver resolved: duckdb 1.5.4
+09:19:39.116225 [error]: [Generic (dbt1000)]: Internal: Parser Error: syntax error at or near "limit"
+
+LINE 14:   limit 10
+           ^ (sqlstate: [0, 0, 0, 0, 0], vendor_code: -2147483648)
+09:19:39.116775 [info ]: Finished running [  0.04s] model main.stg_transactions [error]
+09:19:39.116787 [info ]: Finished running [  0.04s] (1 nodes, 0 skipped, 1 errors)
+09:19:39.116791 [info ]:     Failed model main.stg_transactions (view) [1 of 1 in 0.04s]
+09:19:39.123028 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' with 1 error for target 'dev' [224ms]
+==================== 2026-11-26T09:19:49.155842Z | 01a21727-6ba1-7082-90a6-40cfa0b568dc ====================
+09:19:49.155989 [info ]: dbt 2.0.12
+09:19:49.156719 [info ]: Started loading project
+09:19:49.158135 [info ]: Loading profiles.yml
+09:19:49.258213 [debug]:    Started loading packages
+09:19:49.258571 [debug]:     Loaded [  0.00s] packages
+09:19:49.259131 [info ]: Finished loading project [  0.10s]
+09:19:49.259419 [info ]: Started parsing (3 nodes)
+09:19:49.270972 [debug]:    Started building model nodes
+09:19:49.270976 [debug]:    Started building model nodes
+09:19:49.270986 [debug]:   Finished [  0.00s] building model nodes
+09:19:49.270987 [debug]:   Finished [  0.00s] building model nodes
+09:19:49.271187 [debug]: Finished parsing models/sources.yml [  0.00s]
+09:19:49.271418 [debug]:    Started resolving data tests
+09:19:49.271419 [debug]:    Started resolving data tests
+09:19:49.271441 [debug]:   Finished [  0.00s] resolving data tests
+09:19:49.271441 [debug]:   Finished [  0.00s] resolving data tests
+09:19:49.271722 [debug]: Finished parsing target/inline_4f7bb4a9.sql [  0.00s]
+09:19:49.271733 [debug]:    Started building model nodes
+09:19:49.271840 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+09:19:49.271849 [debug]:    Started building model nodes
+09:19:49.272013 [debug]:   Finished [  0.00s] building model nodes
+09:19:49.272044 [debug]:   Finished [  0.00s] building model nodes
+09:19:49.272294 [debug]:    Started resolving data tests
+09:19:49.272303 [debug]:   Finished [  0.00s] resolving data tests
+09:19:49.272324 [debug]:    Started resolving data tests
+09:19:49.272332 [debug]:   Finished [  0.00s] resolving data tests
+09:19:49.272486 [debug]:    Started typechecking macros
+09:19:49.333342 [debug]:   Finished [  0.06s] typechecking macros
+09:19:49.333808 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+09:19:49.333998 [info ]: Started scheduling
+09:19:49.334225 [info ]: Finished scheduling [  0.00s]
+09:19:49.334361 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "main", table: "stg_transactions" }) and interval: None
+09:19:49.335105 [info ]: Started building task graph
+09:19:49.335151 [info ]: Finished building task graph [  0.00s]
+09:19:49.335952 [info ]: Started rendering (1 nodes)
+09:19:49.335963 [info ]: Started model main.inline
+09:19:49.335970 [debug]: Started rendering model main.inline
+09:19:49.336545 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_4f7bb4a9.sql
+09:19:49.336588 [debug]: Finished rendering [  0.00s] model main.inline [success]
+09:19:49.336594 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:19:49.336606 [info ]: Started analyzing (1 nodes)
+09:19:49.336609 [debug]: Started analyzing model main.inline
+09:19:49.339853 [debug]: Finished analyzing [  0.00s] model main.inline [success]
+09:19:49.339865 [info ]: Finished analyzing [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:19:49.339875 [info ]: Started running (1 nodes)
+09:19:49.339880 [info ]: Started running model main.inline
+09:19:49.340350 [debug]: DuckDB driver resolved: duckdb 1.5.4
+09:19:49.492363 [error]: [Generic (dbt1000)]: Internal: Binder Error: Referenced table "payload" not found!
+Candidate tables: "stg_transactions"
+
+LINE 3:   select payload.op as op, payload.after.id as txn_id, payload.after...
+                 ^ (sqlstate: [0, 0, 0, 0, 0], vendor_code: -2147483648)
+09:19:49.492430 [info ]: Finished running [  0.15s] model main.inline [error]
+09:19:49.492439 [info ]: Finished running [  0.15s] (1 nodes, 0 skipped, 1 errors)
+09:19:49.492444 [info ]:     Failed model main.inline (ephemeral) [1 of 1 in 0.15s]
+09:19:49.499674 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' with 1 error for target 'dev' [343ms]
+==================== 2026-11-26T09:19:58.720314Z | 01a21727-90ff-7350-a3f7-dc8b5bbaf8cc ====================
+09:19:58.720530 [info ]: dbt 2.0.12
+09:19:58.720766 [info ]: Started loading project
+09:19:58.721485 [info ]: Loading profiles.yml
+09:19:58.822444 [debug]:    Started loading packages
+09:19:58.822800 [debug]:     Loaded [  0.00s] packages
+09:19:58.823344 [info ]: Finished loading project [  0.10s]
+09:19:58.823633 [info ]: Started parsing (3 nodes)
+09:19:58.835416 [debug]:    Started building model nodes
+09:19:58.835421 [debug]:    Started building model nodes
+09:19:58.835432 [debug]:   Finished [  0.00s] building model nodes
+09:19:58.835431 [debug]:   Finished [  0.00s] building model nodes
+09:19:58.835646 [debug]: Finished parsing models/sources.yml [  0.00s]
+09:19:58.835835 [debug]:    Started resolving data tests
+09:19:58.835835 [debug]:    Started resolving data tests
+09:19:58.835854 [debug]:   Finished [  0.00s] resolving data tests
+09:19:58.835873 [debug]:   Finished [  0.00s] resolving data tests
+09:19:58.835881 [debug]: Finished parsing target/inline_4f930090.sql [  0.00s]
+09:19:58.835890 [debug]:    Started building model nodes
+09:19:58.836122 [debug]:   Finished [  0.00s] building model nodes
+09:19:58.836320 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+09:19:58.836329 [debug]:    Started building model nodes
+09:19:58.836352 [debug]:    Started resolving data tests
+09:19:58.836360 [debug]:   Finished [  0.00s] resolving data tests
+09:19:58.836497 [debug]:   Finished [  0.00s] building model nodes
+09:19:58.836694 [debug]:    Started resolving data tests
+09:19:58.836703 [debug]:   Finished [  0.00s] resolving data tests
+09:19:58.836848 [debug]:    Started typechecking macros
+09:19:58.891735 [debug]:   Finished [  0.05s] typechecking macros
+09:19:58.892168 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+09:19:58.892383 [info ]: Started scheduling
+09:19:58.892443 [info ]: Finished scheduling [  0.00s]
+09:19:58.892582 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "main", table: "stg_transactions" }) and interval: None
+09:19:58.893120 [info ]: Started building task graph
+09:19:58.893169 [info ]: Finished building task graph [  0.00s]
+09:19:58.893988 [info ]: Started rendering (1 nodes)
+09:19:58.894043 [info ]: Started model main.inline
+09:19:58.894050 [debug]: Started rendering model main.inline
+09:19:58.894477 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_4f930090.sql
+09:19:58.894519 [debug]: Finished rendering [  0.00s] model main.inline [success]
+09:19:58.894525 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:19:58.894538 [info ]: Started analyzing (1 nodes)
+09:19:58.894543 [debug]: Started analyzing model main.inline
+09:19:58.897344 [debug]: Finished analyzing [  0.00s] model main.inline [success]
+09:19:58.897353 [info ]: Finished analyzing [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:19:58.897360 [info ]: Started running (1 nodes)
+09:19:58.897363 [info ]: Started running model main.inline
+09:19:58.897704 [debug]: DuckDB driver resolved: duckdb 1.5.4
+09:19:58.943162 [debug]: Query executed on node unknown:
+
+  
+  select op, after.id as txn_id, after.txn_type as txn_type, after.amount as amount, after.status as status, event_date from "warehouse"."main"."stg_transactions"
+  
+  limit 10
+
+09:19:58.945011 [info ]: Query show_sql_operation_inline
+┌────┬──────────────────────────────────────┬──────────┬──────────┬───────────┬────────────┐
+│ op ┆ txn_id                               ┆ txn_type ┆ amount   ┆ status    ┆ event_date │
+╞════╪══════════════════════════════════════╪══════════╪══════════╪═══════════╪════════════╡
+│ r  ┆ 01a21718-fd73-760f-a4e1-be2ec6872258 ┆ deposit  ┆ 10000.00 ┆ pending   ┆ 2026-11-26 │
+│ c  ┆ 01a2171c-f0f3-71c6-b2e5-35cb8a73ca13 ┆ deposit  ┆ 10000.00 ┆ pending   ┆ 2026-11-26 │
+│ u  ┆ 01a2171c-f0f3-71c6-b2e5-35cb8a73ca13 ┆ deposit  ┆ 10000.00 ┆ completed ┆ 2026-11-26 │
+│ c  ┆ 01a21724-4859-76af-8748-4e2f2cff15ce ┆ deposit  ┆ 10000.00 ┆ pending   ┆ 2026-11-26 │
+│ u  ┆ 01a21724-4859-76af-8748-4e2f2cff15ce ┆ deposit  ┆ 10000.00 ┆ completed ┆ 2026-11-26 │
+│ c  ┆ 01a21725-977c-73f5-b947-ebe27441f4e8 ┆ transfer ┆ 100.00   ┆ pending   ┆ 2026-11-26 │
+│ u  ┆ 01a21725-977c-73f5-b947-ebe27441f4e8 ┆ transfer ┆ 100.00   ┆ completed ┆ 2026-11-26 │
+└────┴──────────────────────────────────────┴──────────┴──────────┴───────────┴────────────┘
+7 rows.
+09:19:58.945162 [info ]: Finished running [  0.05s] model main.inline [success]
+09:19:58.945173 [info ]: Finished running [  0.05s] (1 nodes, 0 skipped, 0 errors)
+09:19:58.945188 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.05s]
+09:19:58.952963 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [232ms]
+==================== 2026-11-26T09:19:58.966639Z | 01a21727-91f6-7ee0-9a49-58c0a23b7fac ====================
+09:19:58.966702 [info ]: dbt 2.0.12
+09:19:58.966822 [info ]: Started loading project
+09:19:58.967160 [info ]: Loading profiles.yml
+09:19:59.057699 [debug]:    Started loading packages
+09:19:59.058055 [debug]:     Loaded [  0.00s] packages
+09:19:59.058593 [info ]: Finished loading project [  0.09s]
+09:19:59.058727 [info ]: Started parsing (3 nodes)
+09:19:59.070542 [debug]: Finished parsing models/sources.yml [  0.00s]
+09:19:59.070564 [debug]:    Started building model nodes
+09:19:59.070588 [debug]:   Finished [  0.00s] building model nodes
+09:19:59.070598 [debug]:    Started building model nodes
+09:19:59.070606 [debug]:   Finished [  0.00s] building model nodes
+09:19:59.071007 [debug]:    Started resolving data tests
+09:19:59.071006 [debug]:    Started resolving data tests
+09:19:59.071024 [debug]:   Finished [  0.00s] resolving data tests
+09:19:59.071024 [debug]:   Finished [  0.00s] resolving data tests
+09:19:59.071069 [debug]: Finished parsing target/inline_4ca51e03.sql [  0.00s]
+09:19:59.071079 [debug]:    Started building model nodes
+09:19:59.071106 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+09:19:59.071115 [debug]:    Started building model nodes
+09:19:59.071386 [debug]:   Finished [  0.00s] building model nodes
+09:19:59.071386 [debug]:   Finished [  0.00s] building model nodes
+09:19:59.071713 [debug]:    Started resolving data tests
+09:19:59.071715 [debug]:    Started resolving data tests
+09:19:59.071722 [debug]:   Finished [  0.00s] resolving data tests
+09:19:59.071724 [debug]:   Finished [  0.00s] resolving data tests
+09:19:59.071863 [debug]:    Started typechecking macros
+09:19:59.129513 [debug]:   Finished [  0.06s] typechecking macros
+09:19:59.129954 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+09:19:59.130151 [info ]: Started scheduling
+09:19:59.130203 [info ]: Finished scheduling [  0.00s]
+09:19:59.130849 [info ]: Started building task graph
+09:19:59.130891 [info ]: Finished building task graph [  0.00s]
+09:19:59.131598 [info ]: Started rendering (1 nodes)
+09:19:59.131613 [info ]: Started model main.inline
+09:19:59.131622 [debug]: Started rendering model main.inline
+09:19:59.132001 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_4ca51e03.sql
+09:19:59.132057 [debug]: Finished rendering [  0.00s] model main.inline [success]
+09:19:59.132063 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:19:59.132077 [info ]: Started analyzing (1 nodes)
+09:19:59.132081 [debug]: Started analyzing model main.inline
+09:19:59.137275 [debug]: Finished analyzing [  0.01s] model main.inline [success]
+09:19:59.137281 [info ]: Finished analyzing [  0.01s] (1 nodes, 0 skipped, 0 errors)
+09:19:59.137288 [info ]: Started running (1 nodes)
+09:19:59.137290 [info ]: Started running model main.inline
+09:19:59.137602 [debug]: DuckDB driver resolved: duckdb 1.5.4
+09:19:59.192802 [debug]: Query executed on node unknown:
+
+  
+  select 'transactions' as src, count(*) as n_rows, count(distinct filename) as n_files from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true, filename=true) union all select 'ledger_entries', count(*), count(distinct filename) from read_parquet('s3://bronze/topics/transactions.public.ledger_entries/event_date=*/*.parquet', filename=true) union all select 'accounts', count(*), count(distinct filename) from read_parquet('s3://bronze/topics/transactions.public.accounts/event_date=*/*.parquet', filename=true)
+  
+  limit 10
+
+09:19:59.193395 [info ]: Query show_sql_operation_inline
+┌────────────────┬────────┬─────────┐
+│ src            ┆ n_rows ┆ n_files │
+╞════════════════╪════════╪═════════╡
+│ transactions   ┆ 7      ┆ 4       │
+│ ledger_entries ┆ 6      ┆ 1       │
+│ accounts       ┆ 18     ┆ 4       │
+└────────────────┴────────┴─────────┘
+3 rows.
+09:19:59.193466 [info ]: Finished running [  0.06s] model main.inline [success]
+09:19:59.193476 [info ]: Finished running [  0.06s] (1 nodes, 0 skipped, 0 errors)
+09:19:59.193480 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.06s]
+09:19:59.200767 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [234ms]
+==================== 2026-11-26T09:20:06.656349Z | 01a21727-afff-7603-9b50-a63746442948 ====================
+09:20:06.656425 [info ]: dbt 2.0.12
+09:20:06.656633 [info ]: Started loading project
+09:20:06.656951 [info ]: Loading profiles.yml
+09:20:06.747346 [debug]:    Started loading packages
+09:20:06.747704 [debug]:     Loaded [  0.00s] packages
+09:20:06.748242 [info ]: Finished loading project [  0.09s]
+09:20:06.748422 [info ]: Started parsing (3 nodes)
+09:20:06.760581 [debug]:    Started building model nodes
+09:20:06.760584 [debug]:    Started building model nodes
+09:20:06.760596 [debug]:   Finished [  0.00s] building model nodes
+09:20:06.760614 [debug]:   Finished [  0.00s] building model nodes
+09:20:06.760644 [debug]: Finished parsing models/sources.yml [  0.00s]
+09:20:06.760989 [debug]:    Started resolving data tests
+09:20:06.760989 [debug]:    Started resolving data tests
+09:20:06.761010 [debug]:   Finished [  0.00s] resolving data tests
+09:20:06.761024 [debug]:   Finished [  0.00s] resolving data tests
+09:20:06.761116 [debug]: Finished parsing target/inline_c96092b5.sql [  0.00s]
+09:20:06.761124 [debug]:    Started building model nodes
+09:20:06.761212 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+09:20:06.761221 [debug]:    Started building model nodes
+09:20:06.761404 [debug]:   Finished [  0.00s] building model nodes
+09:20:06.761432 [debug]:   Finished [  0.00s] building model nodes
+09:20:06.761685 [debug]:    Started resolving data tests
+09:20:06.761694 [debug]:   Finished [  0.00s] resolving data tests
+09:20:06.761705 [debug]:    Started resolving data tests
+09:20:06.761713 [debug]:   Finished [  0.00s] resolving data tests
+09:20:06.761863 [debug]:    Started typechecking macros
+09:20:06.817370 [debug]:   Finished [  0.06s] typechecking macros
+09:20:06.817826 [info ]: Finished parsing [  0.07s] (3 nodes, 0 skipped, 0 errors)
+09:20:06.818125 [info ]: Started scheduling
+09:20:06.818188 [info ]: Finished scheduling [  0.00s]
+09:20:06.818365 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "accounts" }) and interval: None
+09:20:06.818377 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+09:20:06.818380 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "ledger_entries" }) and interval: None
+09:20:06.818382 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "account_holders" }) and interval: None
+09:20:06.818385 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "users" }) and interval: None
+09:20:06.818387 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "user_accountactivity" }) and interval: None
+09:20:06.819010 [info ]: Started building task graph
+09:20:06.819069 [info ]: Finished building task graph [  0.00s]
+09:20:06.819781 [info ]: Started rendering (1 nodes)
+09:20:06.819792 [info ]: Started model main.inline
+09:20:06.819801 [debug]: Started rendering model main.inline
+09:20:06.820306 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_c96092b5.sql
+09:20:06.820371 [debug]: Finished rendering [  0.00s] model main.inline [success]
+09:20:06.820377 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:20:06.820394 [info ]: Started analyzing (1 nodes)
+09:20:06.820400 [debug]: Started analyzing model main.inline
+09:20:06.825334 [debug]: Finished analyzing [  0.00s] model main.inline [success]
+09:20:06.825340 [info ]: Finished analyzing [  0.00s] (1 nodes, 0 skipped, 0 errors)
+09:20:06.825346 [info ]: Started running (1 nodes)
+09:20:06.825349 [info ]: Started running model main.inline
+09:20:06.825758 [debug]: DuckDB driver resolved: duckdb 1.5.4
+09:20:06.895862 [debug]: Query executed on node unknown:
+
+  
+  select 'transactions' as src, count(*) as n_rows from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) union all select 'accounts' as src, count(*) as n_rows from read_parquet('s3://bronze/topics/transactions.public.accounts/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) union all select 'users' as src, count(*) as n_rows from read_parquet('s3://bronze/topics/transactions.public.users/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) union all select 'account_holders' as src, count(*) as n_rows from read_parquet('s3://bronze/topics/transactions.public.account_holders/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) union all select 'ledger_entries' as src, count(*) as n_rows from read_parquet('s3://bronze/topics/transactions.public.ledger_entries/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) union all select 'user_accountactivity' as src, count(*) as n_rows from read_parquet('s3://bronze/topics/transactions.public.user_accountactivity/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)
+  
+  limit 10
+
+09:20:06.896222 [info ]: Query show_sql_operation_inline
+┌──────────────────────┬────────┐
+│ src                  ┆ n_rows │
+╞══════════════════════╪════════╡
+│ transactions         ┆ 7      │
+│ accounts             ┆ 18     │
+│ users                ┆ 8      │
+│ account_holders      ┆ 13     │
+│ ledger_entries       ┆ 6      │
+│ user_accountactivity ┆ 5      │
+└──────────────────────┴────────┘
+6 rows.
+09:20:06.896284 [info ]: Finished running [  0.07s] model main.inline [success]
+09:20:06.896293 [info ]: Finished running [  0.07s] (1 nodes, 0 skipped, 0 errors)
+09:20:06.896297 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.07s]
+09:20:06.902578 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [246ms]
+==================== 2026-11-26T10:45:53.129165Z | 01a21776-375f-71c0-91f8-0e088b7d0097 ====================
+10:45:53.131768 [info ]: dbt 2.0.12
+10:45:53.136030 [info ]: Started loading project
+10:45:53.158712 [info ]: Loading profiles.yml
+10:45:53.166189 [info ]: Finished loading project [  0.03s]
+10:45:53.166447 [error]: [InvalidConfig (dbt1005)]: Jinja render error: invalid operation: 'env_var': environment variable 'MINIO_ROOT_USER' not found
+(in :1:1)
+10:45:59.280790 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' with 1 error [6.2s]
+==================== 2026-11-26T10:54:59.064579Z | 01a2177e-8be0-75d2-a49e-ff2133b446d5 ====================
+10:54:59.068903 [info ]: dbt 2.0.12
+10:54:59.074320 [info ]: Started loading project
+10:54:59.094458 [info ]: Loading profiles.yml
+10:54:59.328623 [debug]:    Started loading packages
+10:54:59.338730 [debug]:     Loaded [  0.01s] packages
+10:54:59.344849 [info ]: Finished loading project [  0.27s]
+10:54:59.350816 [info ]: Started parsing (2 nodes)
+10:54:59.412899 [debug]:    Started building model nodes
+10:54:59.412907 [debug]:    Started building model nodes
+10:54:59.412938 [debug]:   Finished [  0.00s] building model nodes
+10:54:59.412938 [debug]:   Finished [  0.00s] building model nodes
+10:54:59.414045 [debug]: Finished parsing models/sources.yml [  0.01s]
+10:54:59.414172 [debug]:    Started resolving data tests
+10:54:59.414174 [debug]:    Started resolving data tests
+10:54:59.414391 [debug]:   Finished [  0.00s] resolving data tests
+10:54:59.414391 [debug]:   Finished [  0.00s] resolving data tests
+10:54:59.429863 [debug]: Finished parsing models/stg_transactions.sql [  0.01s]
+10:54:59.429915 [debug]:    Started building model nodes
+10:54:59.431977 [debug]:   Finished [  0.00s] building model nodes
+10:54:59.432753 [debug]:    Started resolving data tests
+10:54:59.432770 [debug]:   Finished [  0.00s] resolving data tests
+10:54:59.433292 [debug]:    Started typechecking macros
+10:54:59.493574 [debug]:   Finished [  0.06s] typechecking macros
+10:54:59.496866 [info ]: Finished parsing [  0.15s] (2 nodes, 0 skipped, 0 errors)
+10:54:59.501930 [info ]: Started scheduling
+10:54:59.503595 [info ]: Finished scheduling [  0.00s]
+10:54:59.507109 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+10:54:59.517577 [info ]: Started building task graph
+10:54:59.522189 [info ]: Finished building task graph [  0.00s]
+10:54:59.553182 [info ]: Started rendering (1 nodes)
+10:54:59.553351 [info ]: Started model main.stg_transactions
+10:54:59.553631 [debug]: Started rendering model main.stg_transactions
+10:54:59.558130 [debug]: Compiled SQL for node model.banking_app.stg_transactions at target/compiled/banking_app/models/stg_transactions.sql
+10:54:59.558315 [debug]: Finished rendering [  0.00s] model main.stg_transactions [success]
+10:54:59.558350 [info ]: Finished rendering [  0.01s] (1 nodes, 0 skipped, 0 errors)
+10:54:59.559232 [info ]: Started analyzing (1 nodes)
+10:54:59.559259 [debug]: Started analyzing model main.stg_transactions
+10:54:59.575748 [debug]: Finished analyzing [  0.02s] model main.stg_transactions [success]
+10:54:59.575784 [info ]: Finished analyzing [  0.02s] (1 nodes, 0 skipped, 0 errors)
+10:54:59.575802 [info ]: Started running (1 nodes)
+10:54:59.575820 [info ]: Started running model main.stg_transactions
+10:54:59.580113 [debug]: DuckDB driver resolved: duckdb 1.5.4
+10:54:59.740924 [debug]: Query executed on node unknown:
+
+  
+  -- Smoke test, not a real staging model: the only question it answers is
+-- whether dbt/DuckDB can reach MinIO and parse a bronze object at all.
+--
+-- select * on purpose. The Debezium envelope comes back as nested structs
+-- (op, before, after, source, ts_ms/ts_us/ts_ns, transaction) plus event_date
+-- from the Hive partition, so this is also the quickest way to see the shape
+-- the real silver models will have to unnest.
+select *
+from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true)
+
+  
+  limit 10
+
+10:54:59.744397 [info ]: [34m[1mQuery[0m [1mshow_model_banking_app_stg_transactions[0m
+┌────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────┬─────────────┬────┬───────────────┬──────────────────┬─────────────────────┬────────────┐
+│[1m before [0m┆[1m after                                                                                               [0m┆[1m source                                                                                              [0m┆[1m transaction [0m┆[1m op [0m┆[1m ts_ms         [0m┆[1m ts_us            [0m┆[1m ts_ns               [0m┆[1m event_date [0m│
+╞════════╪═════════════════════════════════════════════════════════════════════════════════════════════════════╪═════════════════════════════════════════════════════════════════════════════════════════════════════╪═════════════╪════╪═══════════════╪══════════════════╪═════════════════════╪════════════╡
+│        ┆ {id: 01a21718-fd73-760f-a4e1-be2ec6872258, idempotency_key: 6990cf35-ba14-4d98-9b33-5be8e8856000,   ┆ {version: 3.7.1.Final, connector: postgresql, name: transactions, ts_ms: 1795684094055, snapshot:   ┆             ┆ r  ┆ 1795684094116 ┆ 1795684094116704 ┆ 1795684094116704461 ┆ 2026-11-26 │
+│        ┆ initiated_by: 01a21704-eced-76f7-bc13-09aa3cad9322, account_id:                                     ┆ first, db: banking_app_v2, sequence: [null,"27163512"], ts_us: 1795684094055258, ts_ns:             ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 01a21704-ed4e-7015-8ef3-3d8b534d832e, txn_type: deposit, status: pending, amount: 10000.00,         ┆ 1795684094055258000, schema: public, table: transactions, txId: 758, lsn: 27163512, xmin: , origin: ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ currency: USD, destination_account_iban: , description: , failure_reason: , reverse_transaction_id: ┆ , origin_lsn: }                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ , created_at: 2026-11-26T09:04:03.443986Z, updated_at: 2026-11-26T09:04:03.443998Z, completed_at: } ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ {id: 01a2171c-f0f3-71c6-b2e5-35cb8a73ca13, idempotency_key: 19d0e037-3371-4557-9f39-7b3399d67b39,   ┆ {version: 3.7.1.Final, connector: postgresql, name: transactions, ts_ms: 1795684102390, snapshot:   ┆             ┆ c  ┆ 1795684102818 ┆ 1795684102818176 ┆ 1795684102818176299 ┆ 2026-11-26 │
+│        ┆ initiated_by: 01a21704-eced-76f7-bc13-09aa3cad9322, account_id:                                     ┆ false, db: banking_app_v2, sequence: [null,"27163552"], ts_us: 1795684102390529, ts_ns:             ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 01a21704-ed4e-7015-8ef3-3d8b534d832e, txn_type: deposit, status: pending, amount: 10000.00,         ┆ 1795684102390529000, schema: public, table: transactions, txId: 759, lsn: 27163552, xmin: , origin: ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ currency: USD, destination_account_iban: , description: , failure_reason: , reverse_transaction_id: ┆ , origin_lsn: }                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ , created_at: 2026-11-26T09:08:22.388129Z, updated_at: 2026-11-26T09:08:22.388138Z, completed_at: } ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ {id: 01a2171c-f0f3-71c6-b2e5-35cb8a73ca13, idempotency_key: 19d0e037-3371-4557-9f39-7b3399d67b39,   ┆ {version: 3.7.1.Final, connector: postgresql, name: transactions, ts_ms: 1795684534362, snapshot:   ┆             ┆ u  ┆ 1795684534458 ┆ 1795684534458852 ┆ 1795684534458852137 ┆ 2026-11-26 │
+│        ┆ initiated_by: 01a21704-eced-76f7-bc13-09aa3cad9322, account_id:                                     ┆ false, db: banking_app_v2, sequence: ["27169536","27171856"], ts_us: 1795684534362241, ts_ns:       ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 01a21704-ed4e-7015-8ef3-3d8b534d832e, txn_type: deposit, status: completed, amount: 10000.00,       ┆ 1795684534362241000, schema: public, table: transactions, txId: 761, lsn: 27171856, xmin: , origin: ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ currency: USD, destination_account_iban: , description: , failure_reason: , reverse_transaction_id: ┆ , origin_lsn: }                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ , created_at: 2026-11-26T09:08:22.388129Z, updated_at: 2026-11-26T09:15:34.335124Z, completed_at:   ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 2026-11-26T09:15:34.347841Z}                                                                        ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ {id: 01a21724-4859-76af-8748-4e2f2cff15ce, idempotency_key: d1cfa582-1308-4cfc-b103-62d5a292f408,   ┆ {version: 3.7.1.Final, connector: postgresql, name: transactions, ts_ms: 1795684583523, snapshot:   ┆             ┆ c  ┆ 1795684583755 ┆ 1795684583755584 ┆ 1795684583755584674 ┆ 2026-11-26 │
+│        ┆ initiated_by: 01a21704-eced-76f7-bc13-09aa3cad9322, account_id:                                     ┆ false, db: banking_app_v2, sequence: ["27174288","27174344"], ts_us: 1795684583523367, ts_ns:       ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 01a21704-ed4e-7015-8ef3-3d8b534d832e, txn_type: deposit, status: pending, amount: 10000.00,         ┆ 1795684583523367000, schema: public, table: transactions, txId: 763, lsn: 27174344, xmin: , origin: ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ currency: USD, destination_account_iban: , description: , failure_reason: , reverse_transaction_id: ┆ , origin_lsn: }                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ , created_at: 2026-11-26T09:16:23.514132Z, updated_at: 2026-11-26T09:16:23.514153Z, completed_at: } ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ {id: 01a21724-4859-76af-8748-4e2f2cff15ce, idempotency_key: d1cfa582-1308-4cfc-b103-62d5a292f408,   ┆ {version: 3.7.1.Final, connector: postgresql, name: transactions, ts_ms: 1795684584124, snapshot:   ┆             ┆ u  ┆ 1795684584267 ┆ 1795684584267062 ┆ 1795684584267062674 ┆ 2026-11-26 │
+│        ┆ initiated_by: 01a21704-eced-76f7-bc13-09aa3cad9322, account_id:                                     ┆ false, db: banking_app_v2, sequence: ["27175032","27175664"], ts_us: 1795684584124767, ts_ns:       ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 01a21704-ed4e-7015-8ef3-3d8b534d832e, txn_type: deposit, status: completed, amount: 10000.00,       ┆ 1795684584124767000, schema: public, table: transactions, txId: 764, lsn: 27175664, xmin: , origin: ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ currency: USD, destination_account_iban: , description: , failure_reason: , reverse_transaction_id: ┆ , origin_lsn: }                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ , created_at: 2026-11-26T09:16:23.514132Z, updated_at: 2026-11-26T09:16:24.112442Z, completed_at:   ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 2026-11-26T09:16:24.120633Z}                                                                        ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ {id: 01a21725-977c-73f5-b947-ebe27441f4e8, idempotency_key: fbd4cba4-2d4c-4647-af22-0a506ee3a9c9,   ┆ {version: 3.7.1.Final, connector: postgresql, name: transactions, ts_ms: 1795684669311, snapshot:   ┆             ┆ c  ┆ 1795684669565 ┆ 1795684669565622 ┆ 1795684669565622589 ┆ 2026-11-26 │
+│        ┆ initiated_by: 01a21704-eced-76f7-bc13-09aa3cad9322, account_id:                                     ┆ false, db: banking_app_v2, sequence: ["27176832","27177248"], ts_us: 1795684669311338, ts_ns:       ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 01a21704-ed4e-7015-8ef3-3d8b534d832e, txn_type: transfer, status: pending, amount: 100.00,          ┆ 1795684669311338000, schema: public, table: transactions, txId: 766, lsn: 27177248, xmin: , origin: ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ currency: USD, destination_account_iban: GB78RPIQ00366760770671, description: , failure_reason: ,   ┆ , origin_lsn: }                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ reverse_transaction_id: , created_at: 2026-11-26T09:17:49.308337Z, updated_at:                      ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 2026-11-26T09:17:49.308349Z, completed_at: }                                                        ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ {id: 01a21725-977c-73f5-b947-ebe27441f4e8, idempotency_key: fbd4cba4-2d4c-4647-af22-0a506ee3a9c9,   ┆ {version: 3.7.1.Final, connector: postgresql, name: transactions, ts_ms: 1795684669893, snapshot:   ┆             ┆ u  ┆ 1795684670083 ┆ 1795684670083529 ┆ 1795684670083529089 ┆ 2026-11-26 │
+│        ┆ initiated_by: 01a21704-eced-76f7-bc13-09aa3cad9322, account_id:                                     ┆ false, db: banking_app_v2, sequence: ["27183928","27184616"], ts_us: 1795684669893675, ts_ns:       ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 01a21704-ed4e-7015-8ef3-3d8b534d832e, txn_type: transfer, status: completed, amount: 100.00,        ┆ 1795684669893675000, schema: public, table: transactions, txId: 767, lsn: 27184616, xmin: , origin: ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ currency: USD, destination_account_iban: GB78RPIQ00366760770671, description: , failure_reason: ,   ┆ , origin_lsn: }                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ reverse_transaction_id: , created_at: 2026-11-26T09:17:49.308337Z, updated_at:                      ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+│        ┆ 2026-11-26T09:17:49.877862Z, completed_at: 2026-11-26T09:17:49.886370Z}                             ┆                                                                                                     ┆             ┆    ┆               ┆                  ┆                     ┆            │
+└────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────┴────┴───────────────┴──────────────────┴─────────────────────┴────────────┘
+7 rows.
+10:54:59.744756 [info ]: Finished running [  0.17s] model main.stg_transactions [success]
+10:54:59.744779 [info ]: Finished running [  0.17s] (1 nodes, 0 skipped, 0 errors)
+10:54:59.744791 [info ]:  Succeeded model main.stg_transactions (view) [1 of 1 in 0.19s]
+10:55:00.279720 [info ]: New version available 2.0.13 (run `dbt system update`)
+10:55:01.031664 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' successfully for target 'dev' [2.0s]
+==================== 2026-11-27T07:59:44.836789Z | 01a21c04-78c2-7f21-9f38-2a2a2ede942d ====================
+07:59:44.836950 [info ]: dbt 2.0.12
+07:59:44.837241 [info ]: Started loading project
+07:59:44.838399 [info ]: Loading profiles.yml
+07:59:44.943002 [debug]:    Started loading packages
+07:59:44.947483 [debug]:     Loaded [  0.00s] packages
+07:59:44.948121 [info ]: Finished loading project [  0.11s]
+07:59:44.948516 [info ]: Started parsing (3 nodes)
+07:59:44.963385 [debug]:    Started building model nodes
+07:59:44.963382 [debug]:    Started building model nodes
+07:59:44.963400 [debug]:   Finished [  0.00s] building model nodes
+07:59:44.963400 [debug]:   Finished [  0.00s] building model nodes
+07:59:44.963734 [debug]:    Started resolving data tests
+07:59:44.963754 [debug]:   Finished [  0.00s] resolving data tests
+07:59:44.963769 [debug]:    Started resolving data tests
+07:59:44.963781 [debug]:   Finished [  0.00s] resolving data tests
+07:59:44.964264 [debug]: Finished parsing target/inline_c78bdc25.sql [  0.00s]
+07:59:44.964274 [debug]:    Started building model nodes
+07:59:44.964540 [debug]:   Finished [  0.00s] building model nodes
+07:59:44.964728 [debug]:    Started resolving data tests
+07:59:44.964737 [debug]:   Finished [  0.00s] resolving data tests
+07:59:44.969015 [debug]: Finished parsing models/sources.yml [  0.01s]
+07:59:44.972557 [debug]: Finished parsing models/stg_transactions.sql [  0.00s]
+07:59:44.972570 [debug]:    Started building model nodes
+07:59:44.972768 [debug]:   Finished [  0.00s] building model nodes
+07:59:44.972983 [debug]:    Started resolving data tests
+07:59:44.972992 [debug]:   Finished [  0.00s] resolving data tests
+07:59:44.973360 [debug]:    Started typechecking macros
+07:59:45.033475 [debug]:   Finished [  0.06s] typechecking macros
+07:59:45.034002 [info ]: Finished parsing [  0.09s] (3 nodes, 0 skipped, 0 errors)
+07:59:45.034398 [info ]: Started scheduling
+07:59:45.034454 [info ]: Finished scheduling [  0.00s]
+07:59:45.034931 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "warehouse", schema: "minio_raw", table: "transactions" }) and interval: None
+07:59:45.036368 [info ]: Started building task graph
+07:59:45.036425 [info ]: Finished building task graph [  0.00s]
+07:59:45.038230 [info ]: Started rendering (1 nodes)
+07:59:45.038242 [info ]: Started model main.inline
+07:59:45.038250 [debug]: Started rendering model main.inline
+07:59:45.039101 [debug]: Compiled SQL for node model..inline at target/compiled/target/inline_c78bdc25.sql
+07:59:45.039147 [debug]: Finished rendering [  0.00s] model main.inline [success]
+07:59:45.039153 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+07:59:45.039170 [info ]: Started analyzing (1 nodes)
+07:59:45.039175 [debug]: Started analyzing model main.inline
+07:59:45.045357 [warn ]: [SyntaxInvalid (dbt0101)]: missing ')' at ','
+  --> target/inline_c78bdc25.sql:1:60 (target/compiled/target/inline_c78bdc25.sql:1:60)
+07:59:45.045554 [debug]: Finished analyzing [  0.01s] model main.inline [success]
+07:59:45.045564 [info ]: Finished analyzing [  0.01s] (1 nodes, 0 skipped, 0 errors)
+07:59:45.045576 [info ]: Started running (1 nodes)
+07:59:45.045582 [info ]: Started running model main.inline
+07:59:45.045963 [debug]: DuckDB driver resolved: duckdb 1.5.4
+07:59:45.240684 [debug]: Query executed on node unknown:
+
+  
+  select column_name, column_type from (describe select after, source from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true))
+  
+  limit 10
+
+07:59:45.241154 [info ]: Query show_sql_operation_inline
+┌─────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ column_name ┆ column_type                                                                                                                                                                                                                                                                                                                            │
+╞═════════════╪════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╡
+│ after       ┆ STRUCT(id VARCHAR, idempotency_key VARCHAR, initiated_by VARCHAR, account_id VARCHAR, txn_type VARCHAR, status VARCHAR, amount VARCHAR, currency VARCHAR, destination_account_iban VARCHAR, description VARCHAR, failure_reason VARCHAR, reverse_transaction_id VARCHAR, created_at VARCHAR, updated_at VARCHAR, completed_at VARCHAR) │
+│ source      ┆ STRUCT("version" VARCHAR, connector VARCHAR, "name" VARCHAR, ts_ms BIGINT, "snapshot" VARCHAR, db VARCHAR, "sequence" VARCHAR, ts_us BIGINT, ts_ns BIGINT, "schema" VARCHAR, "table" VARCHAR, txId BIGINT, lsn BIGINT, xmin BIGINT, origin VARCHAR, origin_lsn BIGINT)                                                                 │
+└─────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+2 rows.
+07:59:45.241289 [info ]: Finished running [  0.20s] model main.inline [success]
+07:59:45.241326 [info ]: Finished running [  0.20s] (1 nodes, 0 skipped, 0 errors)
+07:59:45.241333 [info ]:  Succeeded model main.inline (ephemeral) [1 of 1 in 0.20s]
+07:59:45.951677 [info ]: New version available 2.0.13 (run `dbt system update`)
+07:59:45.954659 [info ]: 
+==================== Execution Summary =====================
+Finished 'show' with 1 warning for target 'dev' [1.1s]

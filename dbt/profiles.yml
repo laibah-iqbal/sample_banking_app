@@ -1,0 +1,25 @@
+banking_app:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # The warehouse file itself is disposable: bronze lives in object storage
+      # and every model here reads it in place, so this holds only view
+      # definitions and whatever silver/gold gets materialized later.
+      path: "warehouse.duckdb"
+      schema: main
+      threads: 4
+
+      extensions:
+        - httpfs
+        - json
+        - parquet
+
+      secrets:
+        - type: s3
+          key_id: "{{ env_var('MINIO_ROOT_USER') }}"
+          secret: "{{ env_var('MINIO_ROOT_PASSWORD') }}"
+          endpoint: "localhost:9000"
+          use_ssl: false
+          url_style: "path"
+          region: "us-east-1"

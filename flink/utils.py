@@ -61,6 +61,12 @@ def debezium_table_ddl(model: type[SQLModel], *, topic: str,
     which collapses the Debezium envelope into a changelog stream (+I/-U/+U/-D).
     Use this when you want the table's current state, not when you need to
     filter by operation type — RowKind isn't filterable in a WHERE clause.
+
+    Unused at the moment, but kept correct: 'debezium-json.schema-include'
+    below is the format's own flag for the worker's schemas-enabled output,
+    and is the equivalent of the `payload ROW<...>` wrapper that
+    debezium_envelope_ddl has to spell out by hand (the plain 'json' format
+    has no such option).
     """
     table = model.__table__
     col_list = ",\n    ".join(_flink_fields(model))
@@ -75,6 +81,8 @@ def debezium_table_ddl(model: type[SQLModel], *, topic: str,
     'properties.bootstrap.servers' = '{bootstrap_servers}',
     'properties.group.id' = '{group_id}',
     'format' = 'debezium-json',
+    'debezium-json.schema-include' = 'true', -- matches
+    -- CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=true on the Connect worker
     'scan.startup.mode' = 'earliest-offset', -- without this, a fresh consumer group with
     -- no committed offsets and no reset policy makes Kafka throw NoOffsetForPartitionException
     'scan.watermark.idle-timeout' = '5000' --  Adding idle-timeout detection to the sources
@@ -91,20 +99,33 @@ def debezium_envelope_ddl(model: type[SQLModel], *, topic: str,
     instead of letting 'debezium-json' collapse it into a changelog stream.
     Needed whenever a query must filter on operation type, e.g.:
 
-        SELECT after.* FROM transactions WHERE op = 'c'   -- creates only
+        SELECT payload.after.* FROM transactions WHERE payload.op = 'c'
 
     'c' = create, 'u' = update, 'd' = delete, 'r' = initial snapshot read.
     The watermark is declared on a computed column pulled out of `after`
     since a WATERMARK FOR clause can't reference a nested field directly.
+
+    The envelope sits under `payload` because the Connect worker runs with
+    CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=true, so JsonConverter emits
+    {"schema": {...}, "payload": {before, after, op, ts_ms}}. The `schema`
+    half is deliberately not declared — Flink's JSON format ignores fields
+    the DDL doesn't mention, and it is large and of no use here.
+
+    If that worker setting is ever flipped back to "false", this wrapper has
+    to come off or the job goes silently dead: ignore-parse-errors and
+    fail-on-missing-field below mean a shape mismatch yields all-NULL rows
+    rather than an error, so the job stays RUNNING and emits nothing.
     """
-    row_fields = ",\n        ".join(_flink_fields(model))
+    row_fields = ",\n            ".join(_flink_fields(model))
     ts_col = f"{watermark_col}_ts"
     return f"""CREATE TABLE {model.__table__.name} (
-    before ROW<{row_fields}>,
-    after ROW<{row_fields}>,
-    op STRING,
-    ts_ms BIGINT,
-    {ts_col} AS {_watermark_timestamp_expr(f"after.{watermark_col}")},
+    payload ROW<
+        before ROW<{row_fields}>,
+        after ROW<{row_fields}>,
+        op STRING,
+        ts_ms BIGINT
+    >,
+    {ts_col} AS {_watermark_timestamp_expr(f"payload.after.{watermark_col}")},
     WATERMARK FOR {ts_col} AS {ts_col} - {_interval_literal(watermark_lag)}
     ) WITH (
     'connector' = 'kafka',

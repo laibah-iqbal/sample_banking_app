@@ -1,0 +1,18 @@
+name: "banking_app"
+version: "1.0.0"
+config-version: 2
+
+# Matches the profile name in dbt/profiles.yml. Run dbt with
+# --profiles-dir dbt so it picks that up rather than ~/.dbt/profiles.yml,
+# which currently holds an unrelated ClickHouse profile (jaffle_shop_2).
+profile: "banking_app"
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  banking_app:
+    # Views by default: bronze is read in place from object storage, so there is
+    # nothing to copy into the warehouse until the silver models need it.
+    +materialized: view
