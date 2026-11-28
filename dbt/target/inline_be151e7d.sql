@@ -1,1 +1,0 @@
-select json_keys(to_json(after)) as cols from {{ source('minio_raw','users') }} limit 1

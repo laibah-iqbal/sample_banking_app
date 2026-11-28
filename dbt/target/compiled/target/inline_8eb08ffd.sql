@@ -1,1 +1,0 @@
-select unnest(json_keys(to_json(after))) as col from read_parquet('s3://bronze/topics/transactions.public.users/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) limit 1

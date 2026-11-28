@@ -1,1 +1,0 @@
-select op, after.id, after.txn_type, after.status, after.amount, after.description from read_parquet('s3://bronze/topics/transactions.public.transactions/event_date=*/*.parquet', hive_partitioning=true, union_by_name=true) order by after.created_at

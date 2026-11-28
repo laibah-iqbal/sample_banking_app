@@ -1,1 +1,0 @@
-select unnest(json_keys(to_json(after))) as col from {{ source('minio_raw','users') }} limit 1

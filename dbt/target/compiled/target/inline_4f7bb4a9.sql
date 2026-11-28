@@ -1,1 +1,0 @@
-select payload.op as op, payload.after.id as txn_id, payload.after.txn_type as txn_type, payload.after.amount as amount, payload.after.status as status, event_date from "warehouse"."main"."stg_transactions"

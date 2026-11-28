@@ -1,1 +1,0 @@
-select op, after.id as txn_id, after.txn_type as txn_type, after.amount as amount, after.status as status, event_date from "warehouse"."main"."stg_transactions"

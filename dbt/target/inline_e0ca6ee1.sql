@@ -1,1 +1,0 @@
-select op, event_date, after.id, after.txn_type, after.status, after.amount, after.currency from {{ source('minio_raw','transactions') }} order by after.created_at

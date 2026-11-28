@@ -1,1 +1,0 @@
-select column_name, column_type from (describe select after, source from {{ source('minio_raw', 'transactions') }})

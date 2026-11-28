@@ -9,3 +9,5 @@ postgres.md
 testuserdetails.txt
 minio.license
 dbt/target
+.dockerignore
+.DS_STORE

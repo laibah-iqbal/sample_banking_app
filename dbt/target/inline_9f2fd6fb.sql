@@ -1,1 +1,0 @@
-select op, after.id, after.txn_type, after.status, after.amount, after.description from {{ source('minio_raw','transactions') }} order by after.created_at
